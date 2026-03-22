@@ -1,0 +1,77 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="client-form">
+  <h2>@if (isEditMode()) { Editar Cliente } @else { Crear Nuevo Cliente }</h2>
+
+  @if (error(); as err) {
+    <div class="error-message" role="alert">{{ err }}</div>
+  }
+
+  @if (success()) {
+    <div class="success-message" role="status">Cliente creado exitosamente</div>
+  }
+
+  <div class="form-group">
+    <label for="name">Nombre:</label>
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      placeholder="Ingrese el nombre"
+      aria-describedby="name-error"
+    />
+    @if (form.get('name')?.invalid && form.get('name')?.touched) {
+      <span id="name-error" class="error">El nombre es requerido (mínimo 3 caracteres)</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email:</label>
+    <input
+      id="email"
+      type="email"
+      formControlName="email"
+      placeholder="Ingrese el email"
+      aria-describedby="email-error"
+    />
+    @if (form.get('email')?.invalid && form.get('email')?.touched) {
+      <span id="email-error" class="error">Email inválido</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="phone">Teléfono:</label>
+    <input
+      id="phone"
+      type="tel"
+      formControlName="phone"
+      placeholder="Ingrese el teléfono"
+      aria-describedby="phone-error"
+    />
+    @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
+      <span id="phone-error" class="error">El teléfono es requerido</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="address">Dirección:</label>
+    <input
+      id="address"
+      type="text"
+      formControlName="address"
+      placeholder="Ingrese la dirección"
+      aria-describedby="address-error"
+    />
+    @if (form.get('address')?.invalid && form.get('address')?.touched) {
+      <span id="address-error" class="error">La dirección es requerida</span>
+    }
+  </div>
+
+  <button type="submit" [disabled]="form.invalid || loading()">
+    @if (loading()) {
+      Guardando...
+    } @else if (isEditMode()) {
+      Actualizar Cliente
+    } @else {
+      Crear Cliente
+    }
+  </button>
+</form>

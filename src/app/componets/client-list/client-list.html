@@ -1,0 +1,42 @@
+<section class="client-list" aria-labelledby="client-list-title">
+	<h1 id="client-list-title">Clientes</h1>
+
+	<a routerLink="/add-client" class="btn btn-primary">Añadir Cliente</a>
+
+	@if (loading()) {
+		<p>Cargando clientes...</p>
+	} @else if (error()) {
+		<p class="error" role="alert">{{ error() }}</p>
+	} @else if (clients().length === 0) {
+		<p>No hay clientes para mostrar.</p>
+	} @else {
+		<table>
+			<caption>Listado obtenido desde el backend</caption>
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Nombre</th>
+					<th scope="col">Email</th>
+					<th scope="col">Teléfono</th>
+					<th scope="col">Dirección</th>
+					<th scope="col">Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (client of clients(); track client.id) {
+					<tr>
+						<td>{{ client.id }}</td>
+						<td>{{ client.name }}</td>
+						<td>{{ client.email }}</td>
+						<td>{{ client.phone }}</td>
+						<td>{{ client.address }}</td>
+						<td>
+							<a routerLink="/edit-client/{{ client.id }}" class="btn btn-secondary">Editar</a>
+							<button type="button" (click)="deleteClient(client.id)" class="btn btn-danger">Eliminar</button>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+</section>

@@ -1,0 +1,204 @@
+:host {
+	--list-bg-1: #fff7ed;
+	--list-bg-2: #ffedd5;
+	--list-surface: #fffdfa;
+	--list-border: #fed7aa;
+	--list-text: #1f2937;
+	--list-muted: #6b7280;
+	--list-head-bg: #ffedd5;
+	--list-head-text: #9a3412;
+	--list-row-border: #fdba74;
+	--list-row-even: #fff7ed;
+	--list-error-bg: #fff1f2;
+	--list-error-border: #fda4af;
+	--list-error-text: #b91c1c;
+
+	display: block;
+	font-family: 'Manrope', 'Segoe UI', sans-serif;
+}
+
+.client-list {
+	max-width: 980px;
+	margin: 1rem auto;
+	padding: 1.45rem;
+	border: 1px solid var(--list-border);
+	border-radius: 20px;
+	background:
+		radial-gradient(circle at 88% -10%, rgba(234, 88, 12, 0.12), transparent 34%),
+		linear-gradient(135deg, var(--list-bg-1), var(--list-bg-2));
+	box-shadow:
+		0 14px 30px rgba(148, 63, 0, 0.14),
+		inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+	animation: list-enter 320ms ease-out;
+}
+
+.client-list h1 {
+	margin: 0 0 1rem;
+	color: var(--list-text);
+	font-size: clamp(1.3rem, 3vw, 1.75rem);
+	font-weight: 800;
+	letter-spacing: -0.02em;
+}
+
+.client-list p {
+	margin: 0.75rem 0 0;
+	color: var(--list-text);
+	font-weight: 600;
+}
+
+.client-list table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	background: var(--list-surface);
+	border: 1px solid var(--list-row-border);
+	border-radius: 14px;
+	overflow: hidden;
+}
+
+.client-list caption {
+	padding: 0.35rem 0.1rem 0.7rem;
+	text-align: left;
+	color: var(--list-muted);
+	font-size: 0.92rem;
+	font-weight: 700;
+	caption-side: top;
+}
+
+.client-list th,
+.client-list td {
+	padding: 0.7rem 0.8rem;
+	text-align: left;
+	font-size: 0.94rem;
+	border-bottom: 1px solid var(--list-row-border);
+	color: var(--list-text);
+	vertical-align: top;
+}
+
+.client-list th {
+	background: var(--list-head-bg);
+	color: var(--list-head-text);
+	font-weight: 800;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.client-list tbody tr:nth-child(even) {
+	background: var(--list-row-even);
+}
+
+.client-list tbody tr:hover {
+	background: #ffedd5;
+	transition: background-color 160ms ease;
+}
+
+.client-list tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.client-list .error {
+	display: block;
+	padding: 0.7rem 0.85rem;
+	border-radius: 10px;
+	border: 1px solid var(--list-error-border);
+	background: var(--list-error-bg);
+	color: var(--list-error-text);
+	font-weight: 700;
+}
+
+@keyframes list-enter {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.btn {
+	display: inline-block;
+	border: none;
+	border-radius: 10px;
+	padding: 0.54rem 0.92rem;
+	font-size: 0.88rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+	white-space: nowrap;
+	text-decoration: none;
+	text-align: center;
+	vertical-align: middle;
+	margin-right: 0.32rem;
+}
+
+.btn:focus-visible {
+	outline: 3px solid rgba(0, 0, 0, 0.2);
+	outline-offset: 2px;
+}
+
+.btn:disabled {
+	cursor: not-allowed;
+	opacity: 0.65;
+	transform: none;
+}
+
+.btn-primary {
+	display: inline-block;
+	background: linear-gradient(135deg, #ea580c, #f97316);
+	color: #ffffff;
+	margin-bottom: 1rem;
+}
+
+.btn-primary:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 14px rgba(154, 52, 18, 0.28);
+	background: linear-gradient(135deg, #c2410c, #ea580c);
+}
+
+.btn-secondary {
+	background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+	color: #ffffff;
+}
+
+.btn-secondary:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 14px rgba(103, 58, 183, 0.28);
+	background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+}
+
+.btn-danger {
+	background: linear-gradient(135deg, #ef4444, #f87171);
+	color: #ffffff;
+}
+
+.btn-danger:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 14px rgba(220, 38, 38, 0.28);
+	background: linear-gradient(135deg, #dc2626, #ef4444);
+}
+
+@media (max-width: 860px) {
+	.client-list {
+		padding: 1.1rem;
+		margin: 0.5rem;
+		border-radius: 16px;
+	}
+
+	.client-list {
+		overflow-x: auto;
+	}
+
+	.client-list table {
+		min-width: 740px;
+	}
+
+	.btn {
+		padding: 0.48rem 0.68rem;
+		font-size: 0.82rem;
+		margin-right: 0.24rem;
+	}
+}
