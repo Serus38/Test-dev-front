@@ -1,0 +1,64 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="maritime-shipment-form">
+  <h2>@if (isEditMode()) { Editar Envio Maritimo } @else { Crear Nuevo Envio Maritimo }</h2>
+
+  @if (error(); as err) {
+    <div class="error-message" role="alert">{{ err }}</div>
+  }
+
+  @if (success()) {
+    <div class="success-message" role="status">Envio maritimo guardado exitosamente</div>
+  }
+
+  <div class="form-group"><label for="deliveryDate">Fecha entrega:</label><input id="deliveryDate" type="date" formControlName="deliveryDate" /></div>
+  <div class="form-group">
+    <label for="destinationPort">Destino:</label>
+    <select id="destinationPort" [value]="form.controls.port_id.value" (change)="onDestinationChange($event)">
+      <option [value]="0">Seleccione un destino</option>
+      @for (port of ports(); track port.id) {
+        <option [value]="port.id">{{ port.name }} - {{ port.city }}, {{ port.country }}</option>
+      }
+    </select>
+  </div>
+
+  <input type="hidden" formControlName="destination" />
+  <div class="form-group"><label for="discountRate">Descuento (%):</label><input id="discountRate" type="number" min="0" max="100" step="0.01" formControlName="discountRate" readonly /></div>
+  <div class="form-group"><label for="fleetNumber">Flota:</label><input id="fleetNumber" type="text" formControlName="fleetNumber" /></div>
+  <div class="form-group"><label for="guideNumber">Guía:</label><input id="guideNumber" type="text" formControlName="guideNumber" /></div>
+  <div class="form-group"><label for="origin">Origen:</label><input id="origin" type="text" formControlName="origin" /></div>
+  <div class="form-group"><label for="productType">Tipo producto:</label><input id="productType" type="text" formControlName="productType" /></div>
+  <div class="form-group"><label for="quantity">Cantidad:</label><input id="quantity" type="number" min="0" step="1" formControlName="quantity" /></div>
+  <div class="form-group"><label for="registrationDate">Fecha registro:</label><input id="registrationDate" type="date" formControlName="registrationDate" /></div>
+  <div class="form-group"><label for="shippingCost">Costo envío:</label><input id="shippingCost" type="number" min="0" step="0.01" formControlName="shippingCost" /></div>
+  <div class="form-group"><label for="status">Estado:</label><input id="status" type="text" formControlName="status" /></div>
+  <div class="form-group"><label for="totalCost">Costo total:</label><input id="totalCost" type="number" min="0" step="0.01" formControlName="totalCost" readonly /></div>
+  <div class="form-group">
+    <label for="client_id">Cliente:</label>
+    <select id="client_id" formControlName="client_id">
+      <option [value]="0">Seleccione un cliente</option>
+      @for (client of clients(); track client.id) {
+        <option [value]="client.id">{{ client.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="port_id">Puerto:</label>
+    <select id="port_id" formControlName="port_id" (change)="onPortChange($event)">
+      <option [value]="0">Seleccione un puerto</option>
+      @for (port of ports(); track port.id) {
+        <option [value]="port.id">{{ port.name }} - {{ port.city }}</option>
+      }
+    </select>
+  </div>
+  <div class="form-group"><label for="qr_code">QR:</label><input id="qr_code" type="text" formControlName="qr_code" /></div>
+
+  <button type="submit" [disabled]="form.invalid || loading()">
+    @if (loading()) {
+      Guardando...
+    } @else if (isEditMode()) {
+      Actualizar Envio Maritimo
+    } @else {
+      Crear Envio Maritimo
+    }
+  </button>
+</form>

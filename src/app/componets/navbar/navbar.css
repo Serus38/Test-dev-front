@@ -1,0 +1,118 @@
+:host {
+	display: block;
+	height: 100%;
+}
+
+.sidebar {
+	box-sizing: border-box;
+	width: 280px;
+	height: 100%;
+	min-height: 100dvh;
+	padding: 22px 14px;
+	border-right: 1px solid #d6dce5;
+	background: linear-gradient(180deg, #5e6f81 0%, #9e9696 72%);
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 16px;
+}
+
+.brand {
+	display: block;
+	color: #16334f;
+	text-decoration: none;
+	font-size: 1.1rem;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+	padding: 8px 10px;
+}
+
+.menu {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.extras {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid #dce3ef;
+}
+
+.menu-btn {
+	box-sizing: border-box;
+	display: inline-block;
+	width: 100%;
+	border: 1px solid transparent;
+	background: transparent;
+	cursor: pointer;
+	text-decoration: none;
+	text-align: left;
+	color: #1a2735;
+	font-weight: 600;
+	font-size: 0.95rem;
+	padding: 10px 12px;
+	border-radius: 10px;
+	transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+
+.menu-btn:hover {
+	background-color: #e8f0ff;
+}
+
+.menu-btn.active {
+	background-color: #1663cc;
+	color: #ffffff;
+}
+
+.menu-btn.secondary {
+	border-color: #cfd8e6;
+	background: #ffffff;
+}
+
+.menu-btn.secondary:hover {
+	border-color: #aebdd4;
+	background: #f2f7ff;
+}
+
+.menu-btn.secondary.active {
+	border-color: #1663cc;
+	background: #dce9ff;
+	color: #0f3f84;
+}
+
+.menu-btn:focus-visible,
+.brand:focus-visible {
+	outline: 3px solid #0e8f58;
+	outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+	.sidebar {
+		width: 100%;
+		min-height: auto;
+		padding: 12px;
+		border-right: 0;
+		border-bottom: 1px solid #d6dce5;
+	}
+}
+
+.btn {
+	display: inline-block;
+	border: none;
+	border-radius: 10px;
+	padding: 0.54rem 0.92rem;
+	font-size: 0.88rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+	white-space: nowrap;
+	text-decoration: none;
+	text-align: center;
+	vertical-align: middle;
+	margin-right: 0.32rem;
+}

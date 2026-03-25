@@ -1,0 +1,23 @@
+<aside class="sidebar" aria-label="Navegacion principal">
+	<a class="brand" routerLink="/" aria-label="Ir a la lista de clientes">Envios App</a>
+
+	<nav class="menu" aria-label="Menu principal">
+		<a
+			class="menu-btn"
+			[routerLink]="activeSection().listPath"
+			routerLinkActive="active"
+			[routerLinkActiveOptions]="{ exact: true }"
+		>{{ activeSection().listLabel }}</a>
+		<a class="menu-btn" [routerLink]="activeSection().newPath" routerLinkActive="active">{{ activeSection().newLabel }}</a>
+	</nav>
+
+	<div class="extras" aria-label="Acciones secundarias">
+		@for (section of sections; track section.key) {
+			<a
+				class="menu-btn secondary"
+				[class.active]="activeSection().key === section.key"
+				[routerLink]="section.listPath"
+			>{{ section.label }}</a>
+		}
+	</div>
+</aside>

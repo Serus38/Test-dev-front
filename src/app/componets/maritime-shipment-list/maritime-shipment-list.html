@@ -1,0 +1,44 @@
+<section class="maritime-shipment-list" aria-labelledby="maritime-shipment-list-title">
+  <h1 id="maritime-shipment-list-title">Envios maritimos</h1>
+
+  <a routerLink="/maritime_shipments/new" class="btn btn-primary">Añadir Envio Maritimo</a>
+
+  @if (loading()) {
+    <p>Cargando envios maritimos...</p>
+  } @else if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  } @else if (shipments().length === 0) {
+    <p>No hay envios maritimos para mostrar.</p>
+  } @else {
+    <table>
+      <caption>Listado obtenido desde el backend</caption>
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Fecha de entrega</th>
+          <th scope="col">Destino</th>
+          <th scope="col">Guía</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col">Costo total</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (shipment of shipments(); track shipment.id) {
+          <tr>
+            <td>{{ shipment.id }}</td>
+            <td>{{ shipment.deliveryDate }}</td>
+            <td>{{ shipment.destination }}</td>
+            <td>{{ shipment.guideNumber }}</td>
+            <td>{{ shipment.quantity }}</td>
+            <td>{{ shipment.totalCost }}</td>
+            <td>
+              <a routerLink="/maritime_shipments/edit/{{ shipment.id }}" class="btn btn-secondary">Editar</a>
+              <button type="button" (click)="deleteShipment(shipment.id)" class="btn btn-danger">Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

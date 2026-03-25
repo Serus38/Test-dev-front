@@ -1,0 +1,40 @@
+<section class="port-list" aria-labelledby="port-list-title">
+  <h1 id="port-list-title">Puertos</h1>
+
+  <a routerLink="/puertos/new" class="btn btn-primary">Añadir Puerto</a>
+
+  @if (loading()) {
+    <p>Cargando puertos...</p>
+  } @else if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  } @else if (ports().length === 0) {
+    <p>No hay puertos para mostrar.</p>
+  } @else {
+    <table>
+      <caption>Listado obtenido desde el backend</caption>
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">País</th>
+          <th scope="col">Ciudad</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (port of ports(); track port.id) {
+          <tr>
+            <td>{{ port.id }}</td>
+            <td>{{ port.name }}</td>
+            <td>{{ port.country }}</td>
+            <td>{{ port.city }}</td>
+            <td>
+              <a routerLink="/puertos/edit/{{ port.id }}" class="btn btn-secondary">Editar</a>
+              <button type="button" (click)="deletePort(port.id)" class="btn btn-danger">Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

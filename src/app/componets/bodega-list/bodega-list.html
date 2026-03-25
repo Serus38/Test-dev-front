@@ -1,0 +1,40 @@
+<section class="bodega-list" aria-labelledby="bodega-list-title">
+  <h1 id="bodega-list-title">Bodegas</h1>
+
+  <a routerLink="/bodegas/new" class="btn btn-primary">Añadir Bodega</a>
+
+  @if (loading()) {
+    <p>Cargando bodegas...</p>
+  } @else if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  } @else if (bodegas().length === 0) {
+    <p>No hay bodegas para mostrar.</p>
+  } @else {
+    <table>
+      <caption>Listado obtenido desde el backend</caption>
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Pais</th>
+          <th scope="col">Ciudad</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (bodega of bodegas(); track bodega.id) {
+          <tr>
+            <td>{{ bodega.id }}</td>
+            <td>{{ bodega.name }}</td>
+            <td>{{ bodega.country }}</td>
+            <td>{{ bodega.city }}</td>
+            <td>
+              <a routerLink="/bodegas/edit/{{ bodega.id }}" class="btn btn-secondary">Editar</a>
+              <button type="button" (click)="deleteBodega(bodega.id)" class="btn btn-danger">Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

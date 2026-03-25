@@ -1,0 +1,100 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="terrestrial-shipment-form">
+  <h2>@if (isEditMode()) { Editar Envio Terrestre } @else { Crear Nuevo Envio Terrestre }</h2>
+
+  @if (error(); as err) {
+    <div class="error-message" role="alert">{{ err }}</div>
+  }
+
+  @if (success()) {
+    <div class="success-message" role="status">Envio terrestre guardado exitosamente</div>
+  }
+
+  <div class="form-group"><label for="productType">Tipo de producto:</label><input id="productType" type="text" formControlName="productType" /></div>
+
+  <div class="form-group"><label for="quantity">Cantidad:</label><input id="quantity" type="number" formControlName="quantity" /></div>
+
+  <div class="form-group">
+    <h3>Ubicaciones Bodegas</h3>
+    <label for="originBodega_id">Bodega origen:</label>
+    <select id="originBodega_id" formControlName="originBodega_id">
+      <option [value]="0">Sin seleccionar</option>
+      @for (bodega of bodegas(); track bodega.id) {
+        <option [value]="bodega.id">{{ bodega.name }} - {{ bodega.city }}, {{ bodega.country }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="destinationBodega_id">Bodega destino:</label>
+    <select id="destinationBodega_id" formControlName="destinationBodega_id">
+      <option [value]="0">Sin seleccionar</option>
+      @for (bodega of bodegas(); track bodega.id) {
+        <option [value]="bodega.id">{{ bodega.name }} - {{ bodega.city }}, {{ bodega.country }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group">
+    <h3>Ubicaciones Puertos</h3>
+    <label for="originPort_id">Puerto origen:</label>
+    <select id="originPort_id" formControlName="originPort_id">
+      <option [value]="0">Sin seleccionar</option>
+      @for (port of ports(); track port.id) {
+        <option [value]="port.id">{{ port.name }} - {{ port.city }}, {{ port.country }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="destinationPort_id">Puerto destino:</label>
+    <select id="destinationPort_id" formControlName="destinationPort_id">
+      <option [value]="0">Sin seleccionar</option>
+      @for (port of ports(); track port.id) {
+        <option [value]="port.id">{{ port.name }} - {{ port.city }}, {{ port.country }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group"><label for="registrationDate">Fecha registro:</label><input id="registrationDate" type="date" formControlName="registrationDate" /></div>
+
+  <div class="form-group">
+    <label for="deliveryDate">Fecha entrega:
+    </label>
+    <input id="deliveryDate" type="date" formControlName="deliveryDate" />
+  </div>
+
+  <div class="form-group">
+    <label for="client_id">Cliente:</label>
+    <select id="client_id" formControlName="client_id">
+      <option [value]="0">Seleccione un cliente</option>
+      @for (client of clients(); track client.id) {
+        <option [value]="client.id">{{ client.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group"><label for="shippingCost">Costo envío:</label><input id="shippingCost" type="number" formControlName="shippingCost" /></div>
+
+  <div class="form-group"><label for="vehiclePlate">Placa vehículo:</label><input id="vehiclePlate" type="text" formControlName="vehiclePlate" /></div>
+
+  <div class="form-group">
+    <label for="status">Estado:</label>
+    <select id="status" formControlName="status">
+      <option [value]="''">Seleccione un estado</option>
+      <option value="PENDING">PENDIENTE</option>
+      <option value="IN_TRANSIT">EN_TRANSITO</option>
+      <option value="DELIVERED">ENTREGADO</option>
+      <option value="CANCELLED">CANCELADO</option>
+    </select>
+  </div>
+
+  <button type="submit" [disabled]="form.invalid || loading()">
+    @if (loading()) {
+      Guardando...
+    } @else if (isEditMode()) {
+      Actualizar Envio Terrestre
+    } @else {
+      Crear Envio Terrestre
+    }
+  </button>
+</form>

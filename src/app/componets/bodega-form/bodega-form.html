@@ -1,0 +1,64 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="bodega-form">
+  <h2>@if (isEditMode()) { Editar Bodega } @else { Crear Nueva Bodega }</h2>
+
+  @if (error(); as err) {
+    <div class="error-message" role="alert">{{ err }}</div>
+  }
+
+  @if (success()) {
+    <div class="success-message" role="status">Bodega guardada exitosamente</div>
+  }
+
+  <div class="form-group">
+    <label for="name">Nombre:</label>
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      placeholder="Ingrese el nombre"
+      aria-describedby="name-error"
+    />
+    @if (form.get('name')?.invalid && form.get('name')?.touched) {
+      <span id="name-error" class="error">El nombre es requerido (mínimo 3 caracteres)</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="country">País:</label>
+    <input
+      id="country"
+      type="text"
+      formControlName="country"
+      placeholder="Ingrese el país"
+      aria-describedby="country-error"
+    />
+    @if (form.get('country')?.invalid && form.get('country')?.touched) {
+      <span id="country-error" class="error">El país es requerido (mínimo 3 caracteres)</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="city">Ciudad:</label>
+    <input
+      id="city"
+      type="text"
+      formControlName="city"
+      placeholder="Ingrese la ciudad"
+      aria-describedby="city-error"
+    />
+    @if (form.get('city')?.invalid && form.get('city')?.touched) {
+      <span id="city-error" class="error">La ciudad es requerida (mínimo 3 caracteres)</span>
+    }
+  </div>
+
+
+  <button type="submit" [disabled]="form.invalid || loading()">
+    @if (loading()) {
+      Guardando...
+    } @else if (isEditMode()) {
+      Actualizar Bodega
+    } @else {
+      Crear Bodega
+    }
+  </button>
+</form>
