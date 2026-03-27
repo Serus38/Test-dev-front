@@ -19,7 +19,7 @@ export interface LoginResponse {
 })
 export class AuthService {
   // Base del modulo de autenticacion del backend.
-  private readonly apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
+  private readonly apiBase = (import.meta.env?.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
   private readonly apiUrl = `${this.apiBase}/auth`;
   // Claves persistidas para rehidratar sesion al recargar la app.
   private tokenKey = 'authToken';

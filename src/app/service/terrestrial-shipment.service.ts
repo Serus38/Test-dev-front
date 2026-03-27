@@ -14,7 +14,7 @@ export type TerrestrialShipmentUpsertInput = Omit<
 export class TerrestrialShipmentService {
   private readonly http = inject(HttpClient);
   // Endpoint base para el modulo de envios terrestres.
-  private readonly apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
+  private readonly apiBase = (import.meta.env?.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
   private readonly api = `${this.apiBase}/terrestrial-shipment`;
 
   // Obtiene todos los envios terrestres.

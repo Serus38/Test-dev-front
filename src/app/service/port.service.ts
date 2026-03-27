@@ -9,7 +9,7 @@ import { Port } from '../port';
 export class PortService {
   private readonly http = inject(HttpClient);
   // Endpoint base para operaciones CRUD de puertos.
-  private readonly apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
+  private readonly apiBase = (import.meta.env?.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
   private readonly api = `${this.apiBase}/port`;
 
   // Obtiene todos los puertos.

@@ -14,7 +14,7 @@ export type MaritimeShipmentUpsertInput = Omit<
 export class MaritimeShipmentService {
   private readonly http = inject(HttpClient);
   // Endpoint base para el modulo de envios maritimos.
-  private readonly apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
+  private readonly apiBase = (import.meta.env?.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
   private readonly api = `${this.apiBase}/maritime-shipment`;
 
   // Lista todos los envios maritimos.

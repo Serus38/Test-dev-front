@@ -9,7 +9,7 @@ import { Client } from '../client';
 export class ClientService {
   private readonly http = inject(HttpClient);
   // Endpoint base para operaciones CRUD de clientes.
-  private readonly apiBase = (import.meta.env.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
+  private readonly apiBase = (import.meta.env?.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
   private readonly api = `${this.apiBase}/client`;
 
   // Obtiene el listado completo de clientes.
