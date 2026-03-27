@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TerrestrialShipment, type IdReference } from '../terrestrial-shipment';
+import { API_BASE_URL } from './api-base-url.js';
 
 export type TerrestrialShipmentUpsertInput = Omit<
   TerrestrialShipment,
@@ -14,7 +15,7 @@ export type TerrestrialShipmentUpsertInput = Omit<
 export class TerrestrialShipmentService {
   private readonly http = inject(HttpClient);
   // Endpoint base para el modulo de envios terrestres.
-  private readonly apiBase = (import.meta.env?.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
+  private readonly apiBase = API_BASE_URL;
   private readonly api = `${this.apiBase}/terrestrial-shipment`;
 
   // Obtiene todos los envios terrestres.

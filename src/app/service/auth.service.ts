@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { API_BASE_URL } from './api-base-url.js';
 
 export interface LoginRequest {
   username: string;
@@ -19,7 +20,7 @@ export interface LoginResponse {
 })
 export class AuthService {
   // Base del modulo de autenticacion del backend.
-  private readonly apiBase = (import.meta.env?.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
+  private readonly apiBase = API_BASE_URL;
   private readonly apiUrl = `${this.apiBase}/auth`;
   // Claves persistidas para rehidratar sesion al recargar la app.
   private tokenKey = 'authToken';

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Bodega } from '../bodega';
+import { API_BASE_URL } from './api-base-url.js';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,7 @@ import { Bodega } from '../bodega';
 export class BodegaService {
   private readonly http = inject(HttpClient);
   // Endpoint base para operaciones de bodegas.
-  private readonly apiBase = (import.meta.env?.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
+  private readonly apiBase = API_BASE_URL;
   private readonly api = `${this.apiBase}/bodega`;
 
   // Obtiene todas las bodegas registradas.

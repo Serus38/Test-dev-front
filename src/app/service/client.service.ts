@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Client } from '../client';
+import { API_BASE_URL } from './api-base-url.js';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,7 @@ import { Client } from '../client';
 export class ClientService {
   private readonly http = inject(HttpClient);
   // Endpoint base para operaciones CRUD de clientes.
-  private readonly apiBase = (import.meta.env?.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
+  private readonly apiBase = API_BASE_URL;
   private readonly api = `${this.apiBase}/client`;
 
   // Obtiene el listado completo de clientes.

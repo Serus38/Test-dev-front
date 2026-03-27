@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Port } from '../port';
+import { API_BASE_URL } from './api-base-url.js';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,7 @@ import { Port } from '../port';
 export class PortService {
   private readonly http = inject(HttpClient);
   // Endpoint base para operaciones CRUD de puertos.
-  private readonly apiBase = (import.meta.env?.VITE_API_URL || 'http://localhost:8081').replace(/\/$/, '');
+  private readonly apiBase = API_BASE_URL;
   private readonly api = `${this.apiBase}/port`;
 
   // Obtiene todos los puertos.

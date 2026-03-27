@@ -1,0 +1,14 @@
+type AppImportMetaEnv = {
+  readonly NG_APP_API_URL?: string;
+  readonly VITE_API_URL?: string;
+};
+
+const importMeta = import.meta as ImportMeta & {
+  readonly env?: AppImportMetaEnv;
+};
+
+const configuredApiBaseUrl = (
+  importMeta.env?.NG_APP_API_URL ?? importMeta.env?.VITE_API_URL ?? ''
+).trim();
+
+export const API_BASE_URL = configuredApiBaseUrl.replace(/\/$/, '');
