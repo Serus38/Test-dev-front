@@ -16,9 +16,10 @@
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Fecha de entrega</th>
-          <th scope="col">Destino</th>
           <th scope="col">Guía</th>
-          <th scope="col">Cantidad</th>
+          <th scope="col">Destino</th>
+          <th scope="col">Origen</th>
+          <th scope="col">Estado</th>
           <th scope="col">Costo total</th>
           <th scope="col">Acciones</th>
         </tr>
@@ -28,11 +29,22 @@
           <tr>
             <td>{{ shipment.id }}</td>
             <td>{{ shipment.deliveryDate }}</td>
-            <td>{{ shipment.destination }}</td>
             <td>{{ shipment.guideNumber }}</td>
-            <td>{{ shipment.quantity }}</td>
+            <td>{{ getDestination(shipment) }}</td>
+            <td>{{ getOrigin(shipment) }}</td>
+            <td>
+              <span
+                class="status-pill"
+                [class.status-pill-transit]="isTransitStatus(shipment.status)"
+                [class.status-pill-delivered]="isDeliveredStatus(shipment.status)"
+                [class.status-pill-delayed]="isDelayedStatus(shipment.status)"
+                [class.status-pill-pending]="isPendingStatus(shipment.status)"
+                >{{ shipment.status }}</span
+              >
+            </td>
             <td>{{ shipment.totalCost }}</td>
             <td>
+              <button type="button" (click)="openDetails(shipment)" class="btn btn-info">Ver</button>
               <a routerLink="/maritime_shipments/edit/{{ shipment.id }}" class="btn btn-secondary">Editar</a>
               <button type="button" (click)="deleteShipment(shipment.id)" class="btn btn-danger">Eliminar</button>
             </td>
@@ -40,5 +52,89 @@
         }
       </tbody>
     </table>
+  }
+
+  @if (selectedShipment(); as shipment) {
+    <div class="modal-overlay" (click)="closeDetails()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Detalles del Envío Marítimo #{{ shipment.id }}</h2>
+          <button type="button" (click)="closeDetails()" class="btn-close" aria-label="Cerrar">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="details-grid">
+            <div class="detail-item">
+              <label>ID:</label>
+              <span>{{ shipment.id }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Tipo de Producto:</label>
+              <span>{{ shipment.productType }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Cantidad:</label>
+              <span>{{ shipment.quantity }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Origen:</label>
+              <span>{{ getOrigin(shipment) }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Destino:</label>
+              <span>{{getDestination(shipment)}}</span>
+            </div>
+            <div class="detail-item">
+              <label>Fecha de Registro:</label>
+              <span>{{shipment.registrationDate}}</span>
+            </div>
+            <div class="detail-item">
+              <label>Fecha de Entrega:</label>
+              <span>{{ shipment.deliveryDate }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Guía:</label>
+              <span>{{ shipment.guideNumber }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Flota:</label>
+              <span>{{ shipment.fleetNumber }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Costo de Envío:</label>
+              <span>${{ shipment.shippingCost }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Descuento (%):</label>
+              <span>{{ shipment.discountRate }}%</span>
+            </div>
+            <div class="detail-item">
+              <label>Costo Total:</label>
+              <span>${{ shipment.totalCost }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Cliente ID:</label>
+              <span>{{ shipment.client. id }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Estado:</label>
+              <span
+                class="status-pill"
+                [class.status-pill-transit]="isTransitStatus(shipment.status)"
+                [class.status-pill-delivered]="isDeliveredStatus(shipment.status)"
+                [class.status-pill-delayed]="isDelayedStatus(shipment.status)"
+                [class.status-pill-pending]="isPendingStatus(shipment.status)"
+                >{{ shipment.status }}</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" (click)="closeDetails()" class="btn btn-secondary">Cerrar</button>
+          <a routerLink="/maritime_shipments/edit/{{ shipment.id }}" class="btn btn-primary">Editar</a>
+        </div>
+      </div>
+    </div>
   }
 </section>

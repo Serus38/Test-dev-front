@@ -33,6 +33,7 @@ export class PortForm implements OnInit {
     city: ['', [Validators.required, Validators.minLength(3)]],
   });
 
+  // Detecta modo edicion a partir del id en la ruta.
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id) {
@@ -43,6 +44,7 @@ export class PortForm implements OnInit {
     }
   }
 
+  // Carga datos del puerto para editar y precargar formulario.
   private loadPortData(id: number): void {
     this.loading.set(true);
     this.portService.getPortById(id).subscribe({
@@ -61,6 +63,7 @@ export class PortForm implements OnInit {
     });
   }
 
+  // Valida formulario y persiste create/update segun el modo actual.
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();

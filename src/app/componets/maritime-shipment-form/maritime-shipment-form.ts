@@ -3,12 +3,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, timeout } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ClientService, type Client } from '../../service/client.service';
-import { MaritimeShipmentService, type MaritimeShipment } from '../../service/maritime-shipment.service';
 import { PortService, type Port } from '../../service/port.service';
+import {
+  MaritimeShipmentService,
+  type MaritimeShipment,
+  type MaritimeShipmentUpsertInput,
+} from '../../service/maritime-shipment.service';
 
-type CreateMaritimeShipmentInput = Parameters<MaritimeShipmentService['createMaritimeShipment']>[0];
+type CreateMaritimeShipmentInput = MaritimeShipmentUpsertInput;
 
 @Component({
   selector: 'app-maritime-shipment-form',
@@ -18,7 +21,7 @@ type CreateMaritimeShipmentInput = Parameters<MaritimeShipmentService['createMar
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MaritimeShipmentForm implements OnInit {
-  private readonly maritimeShipmentService = inject(MaritimeShipmentService);
+  private readonly MaritimeShipmentService = inject(MaritimeShipmentService);
   private readonly clientService = inject(ClientService);
   private readonly portService = inject(PortService);
   private readonly destroyRef = inject(DestroyRef);
@@ -36,41 +39,80 @@ export class MaritimeShipmentForm implements OnInit {
   readonly ports = signal<Port[]>([]);
 
   readonly form = this.fb.nonNullable.group({
-    deliveryDate: ['', Validators.required],
-    destination: ['', Validators.required],
-    discountRate: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-    fleetNumber: ['', Validators.required],
-    guideNumber: ['', Validators.required],
-    origin: ['', Validators.required],
     productType: ['', Validators.required],
     quantity: [0, [Validators.required, Validators.min(0)]],
+    originBodega_id: [0],
+    destinationBodega_id: [0],
+    originPort_id: [0, Validators.required],
+    destinationPort_id: [0, Validators.required],
     registrationDate: ['', Validators.required],
+    deliveryDate: ['', Validators.required],
+    client_id: [0, [Validators.required, Validators.min(1)]],
     shippingCost: [0, [Validators.required, Validators.min(0)]],
-    status: ['', Validators.required],
-    totalCost: [0, [Validators.required, Validators.min(0)]],
-    client_id: [0, [Validators.required, Validators.min(0)]],
-    port_id: [0, [Validators.required, Validators.min(0)]],
-    qr_code: ['', Validators.required],
-
+    discountRate: [0],
+    totalCost: [0],
+    guideNumber: [''],
+    fleetNumber: [
+      '',
+      [
+        Validators.required,
+        Validators.pattern(/^[A-Za-z]{3}\d{3}[A-Za-z]$/),
+      ],
+    ],
+    status: [''],
   });
 
-  private toPayload(): CreateMaritimeShipmentInput {
-    const raw = this.form.getRawValue();
-    return {
-      ...raw,
-      discountRate: Number(raw.discountRate),
-      quantity: Number(raw.quantity),
-      shippingCost: Number(raw.shippingCost),
-      totalCost: Number(raw.totalCost),
-      client_id: Number(raw.client_id),
-      port_id: Number(raw.port_id),
-    };
+  // Formatea input de costo para UX y sincroniza valor numerico real.
+  onShippingCostInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const digits = (input.value ?? '').replace(/\D/g, '');
+
+    if (!digits) {
+      this.form.controls.shippingCost.setValue(0, { emitEvent: false });
+      input.value = '';
+      return;
+    }
+
+    const numericValue = Number(digits);
+    this.form.controls.shippingCost.setValue(numericValue, { emitEvent: false });
+    input.value = new Intl.NumberFormat('es-CO').format(numericValue);
   }
 
+  // Convierte el valor del formulario al DTO esperado por el backend.
+  private toPayload(): CreateMaritimeShipmentInput {
+    const raw = this.form.getRawValue();
+    const {
+      discountRate: _discountRate,
+      totalCost: _totalCost,
+      guideNumber: _guideNumber,
+      originBodega_id,
+      destinationBodega_id,
+      originPort_id,
+      destinationPort_id,
+      client_id,
+      ...rest
+    } = raw;
+
+    return {
+      ...rest,
+      productType: rest.productType,
+      quantity: Number(raw.quantity),
+      originBodega: originBodega_id ? { id: Number(originBodega_id) } : null,
+      destinationBodega: destinationBodega_id ? { id: Number(destinationBodega_id) } : null,
+      originPort: originPort_id ? { id: Number(originPort_id) } : null,
+      destinationPort: destinationPort_id ? { id: Number(destinationPort_id) } : null,
+      registrationDate: rest.registrationDate,
+      deliveryDate: rest.deliveryDate,
+      client: { id: Number(client_id) },
+      shippingCost: Number(raw.shippingCost),
+      fleetNumber: rest.fleetNumber,
+      status: rest.status,
+    } as CreateMaritimeShipmentInput;
+  }
+
+  // Inicializa catalogos y determina si el flujo es de edicion.
   ngOnInit(): void {
     this.loadOptions();
-    this.setupAutomaticPricing();
-
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id) {
       const shipmentId = Number(id);
@@ -80,6 +122,7 @@ export class MaritimeShipmentForm implements OnInit {
     }
   }
 
+  // Carga catalogos auxiliares (clientes y puertos) para selects.
   private loadOptions(): void {
     this.clientService.getClientList().subscribe({
       next: (clients) => this.clients.set(clients),
@@ -92,91 +135,37 @@ export class MaritimeShipmentForm implements OnInit {
     });
   }
 
-  onDestinationChange(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const selectedPortId = Number(select.value);
-    this.applyPortSelection(selectedPortId);
-  }
 
-  onPortChange(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const selectedPortId = Number(select.value);
-    this.applyPortSelection(selectedPortId);
-  }
-
-  private applyPortSelection(selectedPortId: number): void {
-    const selectedPort = this.ports().find((port) => port.id === selectedPortId);
-
-    if (!selectedPort) {
-      this.form.patchValue({ destination: '' });
-      return;
-    }
-
-    this.form.patchValue({
-      destination: `${selectedPort.name} - ${selectedPort.city}, ${selectedPort.country}`,
-      port_id: selectedPort.id,
-    });
-  }
-
-  private setupAutomaticPricing(): void {
-    this.form.controls.quantity.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.updateDiscountAndTotalCost());
-
-    this.form.controls.shippingCost.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.updateDiscountAndTotalCost());
-
-    this.updateDiscountAndTotalCost();
-  }
-
-  private updateDiscountAndTotalCost(): void {
-    const quantity = Math.max(0, Number(this.form.controls.quantity.value ?? 0));
-    const shippingCostPerProduct = Math.max(0, Number(this.form.controls.shippingCost.value ?? 0));
-
-    const discountRate = Math.min(100, Math.floor(quantity / 10) * 5);
-    const subtotal = quantity * shippingCostPerProduct;
-    const totalCost = Number((subtotal * (1 - discountRate / 100)).toFixed(2));
-
-    this.form.patchValue(
-      {
-        discountRate,
-        totalCost,
-      },
-      { emitEvent: false },
-    );
-  }
-
+  // Recupera envio existente y precarga el formulario en modo edicion.
   private loadShipmentData(id: number): void {
     this.loading.set(true);
-    this.maritimeShipmentService.getMaritimeShipmentById(id).subscribe({
+    this.MaritimeShipmentService.getMaritimeShipmentById(id).subscribe({
       next: (shipment) => {
         this.form.patchValue({
-          deliveryDate: shipment.deliveryDate,
-          destination: shipment.destination,
-          discountRate: Number(shipment.discountRate),
-          fleetNumber: shipment.fleetNumber,
-          guideNumber: shipment.guideNumber,
-          origin: shipment.origin,
           productType: shipment.productType,
           quantity: Number(shipment.quantity),
+          originPort_id: shipment.originPort.id ?? 0,
+          destinationPort_id: shipment.destinationPort?.id ?? 0,
           registrationDate: shipment.registrationDate,
+          deliveryDate: shipment.deliveryDate,
+          client_id: Number(shipment.client.id),
           shippingCost: Number(shipment.shippingCost),
-          status: shipment.status,
+          discountRate: Number(shipment.discountRate),
           totalCost: Number(shipment.totalCost),
-          client_id: Number(shipment.client_id),
-          port_id: Number(shipment.port_id),
-          qr_code: shipment.qr_code,
+          guideNumber: shipment.guideNumber,
+          fleetNumber: shipment.fleetNumber,
+          status: shipment.status,
         });
         this.loading.set(false);
       },
       error: () => {
-        this.error.set('No se pudo cargar el envio maritimo para editar.');
+        this.error.set('No se pudo cargar el envio marítimo para editar.');
         this.loading.set(false);
       },
     });
   }
 
+  // Valida y persiste create/update con manejo de timeout/errores HTTP.
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -190,8 +179,8 @@ export class MaritimeShipmentForm implements OnInit {
     const payload = this.toPayload();
 
     const request$ = this.isEditMode()
-      ? this.maritimeShipmentService.updateMaritimeShipment(this.editShipmentId()!, payload)
-      : this.maritimeShipmentService.createMaritimeShipment(payload);
+      ? this.MaritimeShipmentService.updateMaritimeShipment(this.editShipmentId()!, payload)
+      : this.MaritimeShipmentService.createMaritimeShipment(payload);
 
     request$
       .pipe(
@@ -202,21 +191,21 @@ export class MaritimeShipmentForm implements OnInit {
         next: (shipment) => {
           if (!this.isEditMode()) {
             this.form.reset({
-              deliveryDate: '',
-              destination: '',
-              discountRate: 0,
-              fleetNumber: '',
-              guideNumber: '',
-              origin: '',
               productType: '',
               quantity: 0,
+              originBodega_id: 0,
+              destinationBodega_id: 0,
+              originPort_id: 0,
+              destinationPort_id: 0,
               registrationDate: '',
-              shippingCost: 0,
-              status: '',
-              totalCost: 0,
+              deliveryDate: '',
               client_id: 0,
-              port_id: 0,
-              qr_code: '',
+              shippingCost: 0,
+              discountRate: 0,
+              totalCost: 0,
+              guideNumber: '',
+              fleetNumber: '',
+              status: '',
             });
           }
           this.success.set(true);
@@ -232,7 +221,7 @@ export class MaritimeShipmentForm implements OnInit {
             } else if (err.status === 0) {
               this.error.set('No se pudo conectar con el servidor (CORS/red).');
             } else {
-              this.error.set('Error al guardar el envio maritimo.');
+              this.error.set('Error al guardar el envio marítimo.');
             }
             return;
           }
@@ -240,7 +229,7 @@ export class MaritimeShipmentForm implements OnInit {
           if (err.name === 'TimeoutError') {
             this.error.set('El servidor tardó demasiado en responder.');
           } else {
-            this.error.set('Error inesperado al guardar el envio maritimo.');
+            this.error.set('Error inesperado al guardar el envio marítimo.');
           }
         },
       });

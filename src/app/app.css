@@ -4,14 +4,15 @@
 
 .app-shell {
 	display: grid;
-	grid-template-columns: 280px minmax(0, 1fr);
+	grid-template-columns: 215px minmax(0, 1fr);
 	min-height: 100dvh;
-	background: #fbfdff;
+	background: linear-gradient(165deg, #f6f1e7, #efe7d8);
 }
 
 .app-content {
 	padding: 20px;
 	overflow-x: auto;
+	background: transparent;
 }
 
 @media (max-width: 900px) {

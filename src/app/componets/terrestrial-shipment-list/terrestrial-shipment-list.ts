@@ -18,17 +18,24 @@ export class TerrestrialShipmentList {
   readonly error = signal<string | null>(null);
   readonly selectedShipment = signal<TerrestrialShipment | null>(null);
 
+  // Carga inicial de envios terrestres.
   constructor() {
     this.listShipments();
   }
 
+  // Obtiene, ordena por fecha y publica el resultado en la vista.
   listShipments(): void {
     this.loading.set(true);
     this.error.set(null);
 
     this.terrestrialShipmentService.getTerrestrialShipmentList().subscribe({
-      next: (data) => {
-        this.shipments.set(data);
+      next: (shipments) => {
+        const sorted = [...shipments].sort(
+          (a, b) =>
+            new Date(b.registrationDate || b.deliveryDate).getTime() -
+            new Date(a.registrationDate || a.deliveryDate).getTime(),
+        );
+        this.shipments.set(sorted);
         this.loading.set(false);
       },
       error: (err: HttpErrorResponse) => {
@@ -42,6 +49,7 @@ export class TerrestrialShipmentList {
     });
   }
 
+  // Elimina envio y refresca la tabla.
   deleteShipment(id: number): void {
     this.terrestrialShipmentService.deleteTerrestrialShipment(id).subscribe(
       () => this.listShipments(),
@@ -55,6 +63,7 @@ export class TerrestrialShipmentList {
     );
   }
 
+  // Construye etiqueta legible de origen segun bodega/puerto disponible.
   getOrigin(shipment: TerrestrialShipment): string {
     if (shipment.originBodega) {
       return shipment.originBodega.name
@@ -69,6 +78,7 @@ export class TerrestrialShipmentList {
     return 'Sin origen';
   }
 
+  // Construye etiqueta legible de destino segun bodega/puerto disponible.
   getDestination(shipment: TerrestrialShipment): string {
     if (shipment.destinationBodega) {
       return shipment.destinationBodega.name
@@ -83,14 +93,6 @@ export class TerrestrialShipmentList {
     return 'Sin destino';
   }
 
-  openDetails(shipment: TerrestrialShipment): void {
-    this.selectedShipment.set(shipment);
-  }
-
-  closeDetails(): void {
-    this.selectedShipment.set(null);
-  }
-
   getFullLocation(bodega: any, puerto: any): string {
     if (bodega) {
       return `${bodega.name} - ${bodega.city}, ${bodega.country} (Bodega)`;
@@ -99,6 +101,65 @@ export class TerrestrialShipmentList {
       return `${puerto.name} - ${puerto.city}, ${puerto.country} (Puerto)`;
     }
     return 'N/A';
+  }
+
+  // Abre modal con detalle completo del envio.
+  openDetails(shipment: TerrestrialShipment): void {
+    this.selectedShipment.set(shipment);
+  }
+
+  // Cierra modal de detalle.
+  closeDetails(): void {
+    this.selectedShipment.set(null);
+  }
+
+  isDeliveredStatus(status: string): boolean {
+    const normalized = this.normalizeStatus(status);
+    return (
+      normalized.includes('entreg') ||
+      normalized.includes('deliver') ||
+      normalized.includes('complet') ||
+      normalized.includes('finaliz') ||
+      normalized.includes('done')
+    );
+  }
+
+  isDelayedStatus(status: string): boolean {
+    const normalized = this.normalizeStatus(status);
+    return (
+      normalized.includes('retras') ||
+      normalized.includes('demor') ||
+      normalized.includes('delay') ||
+      normalized.includes('late') ||
+      normalized.includes('cancel')
+    );
+  }
+
+  isTransitStatus(status: string): boolean {
+    const normalized = this.normalizeStatus(status);
+    return (
+      normalized.includes('transit') ||
+      normalized.includes('ruta') ||
+      normalized.includes('proceso') ||
+      normalized.includes('camino')
+    );
+  }
+
+  isPendingStatus(status: string): boolean {
+    const normalized = this.normalizeStatus(status);
+    return normalized.includes('pend') || normalized.includes('wait') || normalized.includes('hold');
+  }
+
+  // Normaliza texto de estado para reglas de clasificacion visual.
+  private normalizeStatus(status: string | null | undefined): string {
+    return (status ?? '')
+      .toString()
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[_-]+/g, ' ')
+      .replace(/\s+/g, ' ');
   }
 }
 

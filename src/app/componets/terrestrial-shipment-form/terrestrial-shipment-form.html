@@ -9,12 +9,39 @@
     <div class="success-message" role="status">Envio terrestre guardado exitosamente</div>
   }
 
-  <div class="form-group"><label for="productType">Tipo de producto:</label><input id="productType" type="text" formControlName="productType" /></div>
-
-  <div class="form-group"><label for="quantity">Cantidad:</label><input id="quantity" type="number" formControlName="quantity" /></div>
+  <div class="form-group">
+    <label for="productType">Tipo de producto:</label>
+    <input id="productType" type="text" formControlName="productType" [class.invalid]="form.controls.productType.invalid && form.controls.productType.touched" />
+    @if (form.controls.productType.hasError('required') && form.controls.productType.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+  </div>
 
   <div class="form-group">
-    <h3>Ubicaciones Bodegas</h3>
+    <label for="quantity">Cantidad:</label>
+    <input id="quantity" type="number" formControlName="quantity" [class.invalid]="form.controls.quantity.invalid && form.controls.quantity.touched" />
+    @if (form.controls.quantity.hasError('required') && form.controls.quantity.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+    @if (form.controls.quantity.hasError('min') && form.controls.quantity.touched) {
+      <span class="error-text">La cantidad debe ser mayor o igual a 0</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <h3>Origen</h3>
+    <label for="originType">Tipo de origen:</label>
+    <select id="originType" formControlName="originType" [class.invalid]="form.controls.originType.invalid && form.controls.originType.touched">
+      <option value="TERRESTRE">Terrestre (Bodega)</option>
+      <option value="MARITIMO">Maritimo (Puerto)</option>
+    </select>
+    @if (form.controls.originType.hasError('required') && form.controls.originType.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+  </div>
+
+@if (form.controls.originType.value === 'TERRESTRE') {
+  <div class="form-group">
     <label for="originBodega_id">Bodega origen:</label>
     <select id="originBodega_id" formControlName="originBodega_id">
       <option [value]="0">Sin seleccionar</option>
@@ -23,7 +50,31 @@
       }
     </select>
   </div>
+} @else {
+  <div class="form-group">
+    <label for="originPort_id">Puerto origen:</label>
+    <select id="originPort_id" formControlName="originPort_id">
+      <option [value]="0">Sin seleccionar</option>
+      @for (port of ports(); track port.id) {
+        <option [value]="port.id">{{ port.name }} - {{ port.city }}, {{ port.country }}</option>
+      }
+    </select>
+  </div>
+}
 
+<div class="form-group">
+  <h3>Destino</h3>
+  <label for="destinationType">Tipo de destino:</label>
+  <select id="destinationType" formControlName="destinationType" [class.invalid]="form.controls.destinationType.invalid && form.controls.destinationType.touched">
+    <option value="TERRESTRE">Terrestre (Bodega)</option>
+    <option value="MARITIMO">Maritimo (Puerto)</option>
+  </select>
+  @if (form.controls.destinationType.hasError('required') && form.controls.destinationType.touched) {
+    <span class="error-text">Este campo es requerido</span>
+  }
+</div>
+
+@if (form.controls.destinationType.value === 'TERRESTRE') {
   <div class="form-group">
     <label for="destinationBodega_id">Bodega destino:</label>
     <select id="destinationBodega_id" formControlName="destinationBodega_id">
@@ -33,18 +84,7 @@
       }
     </select>
   </div>
-
-  <div class="form-group">
-    <h3>Ubicaciones Puertos</h3>
-    <label for="originPort_id">Puerto origen:</label>
-    <select id="originPort_id" formControlName="originPort_id">
-      <option [value]="0">Sin seleccionar</option>
-      @for (port of ports(); track port.id) {
-        <option [value]="port.id">{{ port.name }} - {{ port.city }}, {{ port.country }}</option>
-      }
-    </select>
-  </div>
-
+} @else {
   <div class="form-group">
     <label for="destinationPort_id">Puerto destino:</label>
     <select id="destinationPort_id" formControlName="destinationPort_id">
@@ -54,39 +94,93 @@
       }
     </select>
   </div>
+}
 
-  <div class="form-group"><label for="registrationDate">Fecha registro:</label><input id="registrationDate" type="date" formControlName="registrationDate" /></div>
+@if (routeValidationError(); as err) {
+  <div class="route-validation-error" role="alert">{{ err }}</div>
+}
 
   <div class="form-group">
-    <label for="deliveryDate">Fecha entrega:
-    </label>
-    <input id="deliveryDate" type="date" formControlName="deliveryDate" />
+    <label for="registrationDate">Fecha registro:</label>
+    <input id="registrationDate" type="date" formControlName="registrationDate" [class.invalid]="form.controls.registrationDate.invalid && form.controls.registrationDate.touched" />
+    @if (form.controls.registrationDate.hasError('required') && form.controls.registrationDate.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="deliveryDate">Fecha entrega:</label>
+    <input id="deliveryDate" type="date" formControlName="deliveryDate" [class.invalid]="form.controls.deliveryDate.invalid && form.controls.deliveryDate.touched" />
+    @if (form.controls.deliveryDate.hasError('required') && form.controls.deliveryDate.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
   </div>
 
   <div class="form-group">
     <label for="client_id">Cliente:</label>
-    <select id="client_id" formControlName="client_id">
+    <select id="client_id" formControlName="client_id" [class.invalid]="form.controls.client_id.invalid && form.controls.client_id.touched">
       <option [value]="0">Seleccione un cliente</option>
       @for (client of clients(); track client.id) {
         <option [value]="client.id">{{ client.name }}</option>
       }
     </select>
+    @if (form.controls.client_id.hasError('required') && form.controls.client_id.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+    @if (form.controls.client_id.hasError('min') && form.controls.client_id.touched) {
+      <span class="error-text">Debe seleccionar un cliente válido</span>
+    }
   </div>
 
-  <div class="form-group"><label for="shippingCost">Costo envío:</label><input id="shippingCost" type="number" formControlName="shippingCost" /></div>
+  <div class="form-group">
+    <label for="shippingCost">Costo envío:</label>
+    <input
+      id="shippingCost"
+      type="text"
+      inputmode="numeric"
+      formControlName="shippingCost"
+      (input)="onShippingCostInput($event)"
+      [class.invalid]="form.controls.shippingCost.invalid && form.controls.shippingCost.touched"
+    />
+    @if (form.controls.shippingCost.hasError('required') && form.controls.shippingCost.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+    @if (form.controls.shippingCost.hasError('min') && form.controls.shippingCost.touched) {
+      <span class="error-text">El costo debe ser mayor o igual a 0</span>
+    }
+  </div>
 
-  <div class="form-group"><label for="vehiclePlate">Placa vehículo:</label><input id="vehiclePlate" type="text" formControlName="vehiclePlate" /></div>
+  <div class="form-group">
+    <label for="vehiclePlate">Placa vehículo:</label>
+    <input
+      id="vehiclePlate"
+      type="text"
+      formControlName="vehiclePlate"
+      (input)="form.controls.vehiclePlate.setValue(($any($event.target).value || '').toUpperCase(), { emitEvent: false })"
+      [class.invalid]="form.controls.vehiclePlate.invalid && form.controls.vehiclePlate.touched"
+    />
+    @if (form.controls.vehiclePlate.hasError('required') && form.controls.vehiclePlate.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+    @if (form.controls.vehiclePlate.hasError('pattern') && form.controls.vehiclePlate.touched) {
+      <span class="error-text">La placa debe tener al menos 7 caracteres, 3 letras y 4 números (ej: ABC1234)</span>
+    }
+  </div>
 
   <div class="form-group">
     <label for="status">Estado:</label>
     <select id="status" formControlName="status">
       <option [value]="''">Seleccione un estado</option>
       <option value="PENDING">PENDIENTE</option>
-      <option value="IN_TRANSIT">EN_TRANSITO</option>
+      <option value="IN_TRANSIT">EN TRANSITO</option>
       <option value="DELIVERED">ENTREGADO</option>
       <option value="CANCELLED">CANCELADO</option>
     </select>
   </div>
+
+  @if (routeValidationError(); as err) {
+    <div class="route-validation-error" role="alert">{{ err }}</div>
+  }
 
   <button type="submit" [disabled]="form.invalid || loading()">
     @if (loading()) {

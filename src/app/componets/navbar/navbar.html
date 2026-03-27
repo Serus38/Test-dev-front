@@ -1,7 +1,22 @@
 <aside class="sidebar" aria-label="Navegacion principal">
-	<a class="brand" routerLink="/" aria-label="Ir a la lista de clientes">Envios App</a>
+	<a class="brand" routerLink="/dashboard" aria-label="Ir a la lista de clientes">Envios App</a>
+
+	@if (isLoggedIn()) {
+	<div class="user-section">
+		<div class="user-info">
+			<small>Usuario</small>
+			<p>{{ user() }}</p>
+		</div>
+		<button class="btn btn-danger btn-sm" (click)="logout()">
+			Cerrar Sesión
+		</button>
+	</div>
+	}
 
 	<nav class="menu" aria-label="Menu principal">
+		<a class="menu-btn dashboard-btn" routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+			>Dashboard</a
+		>
 		<a
 			class="menu-btn"
 			[routerLink]="activeSection().listPath"
@@ -12,7 +27,7 @@
 	</nav>
 
 	<div class="extras" aria-label="Acciones secundarias">
-		@for (section of sections; track section.key) {
+		@for (section of secondarySections; track section.key) {
 			<a
 				class="menu-btn secondary"
 				[class.active]="activeSection().key === section.key"

@@ -18,10 +18,12 @@ export class ClientList {
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
 
+  // Carga inicial de clientes al entrar a la vista.
   constructor() {
     this.listClients();
   }
 
+  // Consulta clientes y actualiza estados de carga/error para la tabla.
   listClients(): void {
     this.loading.set(true);
     this.error.set(null);
@@ -42,6 +44,7 @@ export class ClientList {
     });
   }
 
+  // Elimina un cliente y refresca la lista.
   deleteClient(id: number){
     this.clientService.deleteClient(id).subscribe(
       ()=> this.listClients(),
@@ -55,6 +58,7 @@ export class ClientList {
     );
   }
 
+  // Recupera un cliente puntual (base para flujo de edicion).
   editClient(id: number){
     this.clientService.getClientById(id).subscribe(
       (client) => {

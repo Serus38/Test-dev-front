@@ -33,6 +33,7 @@ import { ActivatedRoute } from '@angular/router';
 export class SectionPlaceholder {
   private readonly route = inject(ActivatedRoute);
 
+  // Toma el titulo desde data de ruta para mostrar una vista temporal.
   get title(): string {
     return (this.route.snapshot.data['title'] as string) ?? 'Seccion';
   }

@@ -3,19 +3,23 @@
 }
 
 .maritime-shipment-list {
-  max-width: 980px;
+  max-width: 1500px;
   margin: 1rem auto;
   padding: 1.45rem;
-  border: 1px solid #bae6fd;
+  border: 1px solid #d8e2ee;
   border-radius: 20px;
   background:
-    radial-gradient(circle at 88% -10%, rgba(3, 105, 161, 0.14), transparent 34%),
-    linear-gradient(135deg, #eff6ff, #e0f2fe);
+    radial-gradient(circle at 88% -10%, rgba(47, 75, 102, 0.09), transparent 34%),
+    linear-gradient(135deg, #ffffff, #f6f9fc);
+    box-shadow:
+		0 14px 30px rgba(31, 47, 62, 0.14),
+		inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+	animation: list-enter 320ms ease-out;
 }
 
 .maritime-shipment-list h1 {
   margin: 0 0 1rem;
-  color: #082f49;
+  color: #223243;
   font-size: clamp(1.3rem, 3vw, 1.75rem);
 }
 
@@ -24,7 +28,7 @@
   border-collapse: separate;
   border-spacing: 0;
   background: #ffffff;
-  border: 1px solid #7dd3fc;
+  border: 1px solid #d7e1ec;
   border-radius: 14px;
   overflow: hidden;
 }
@@ -32,7 +36,7 @@
 .maritime-shipment-list caption {
   padding: 0.35rem 0.1rem 0.7rem;
   text-align: left;
-  color: #475569;
+  color: #5b6774;
   font-size: 0.92rem;
   caption-side: top;
 }
@@ -42,18 +46,18 @@
   padding: 0.7rem 0.8rem;
   text-align: left;
   font-size: 0.94rem;
-  border-bottom: 1px solid #7dd3fc;
-  color: #0f172a;
+  border-bottom: 1px solid #d7e1ec;
+  color: #223243;
 }
 
 .maritime-shipment-list th {
-  background: #e0f2fe;
-  color: #0c4a6e;
+  background: #eaf0f7;
+  color: #2f465b;
   font-weight: 800;
 }
 
 .maritime-shipment-list tbody tr:nth-child(even) {
-  background: #f0f9ff;
+  background: #f7fbff;
 }
 
 .maritime-shipment-list tbody tr:last-child td {
@@ -68,6 +72,18 @@
   background: #fff1f2;
   color: #b91c1c;
   font-weight: 700;
+}
+
+@keyframes list-enter {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .btn {
@@ -97,14 +113,14 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #0369a1, #0ea5e9);
+  background: linear-gradient(135deg, #1f6feb, #3b82f6);
   color: #ffffff;
-  margin-bottom: 1rem;
+
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(8, 47, 73, 0.28);
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.3);
 }
 
 .btn-secondary {
@@ -114,17 +130,151 @@
 
 .btn-secondary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(15, 118, 110, 0.28);
+  box-shadow: 0 6px 14px rgba(15, 118, 110, 0.3);
 }
 
 .btn-danger {
-  background: linear-gradient(135deg, #ef4444, #f87171);
+  background: linear-gradient(135deg, #dc2626, #ef4444);
   color: #ffffff;
 }
 
 .btn-danger:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(220, 38, 38, 0.28);
+  box-shadow: 0 6px 14px rgba(220, 38, 38, 0.3);
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #ffffff;
+}
+
+.btn-info:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.3);
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #eef3f8;
+  color: #2f465b;
+  font-weight: 700;
+  font-size: 0.82rem;
+  border: 1px solid transparent;
+}
+
+.status-pill-transit {
+  background: #e8f1ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.status-pill-delivered {
+  background: #e8f8ef;
+  color: #166534;
+  border-color: #a7f3d0;
+}
+
+.status-pill-delayed {
+  background: #feecec;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.status-pill-pending {
+  background: #fff6e5;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  cursor: pointer;
+  color: #3f556b;
+  padding: 0;
+  line-height: 1;
+  transition: color 160ms ease;
+}
+
+.btn-close:hover {
+  color: #2f4b66;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: #fffcf6;
+  border-radius: 14px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #d5c7b3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #223243;
+  font-size: 1.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-item label {
+  font-weight: 700;
+  color: #2f465b;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.detail-item span {
+  color: #223243;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #d5c7b3;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 @media (max-width: 860px) {
@@ -137,5 +287,13 @@
 
   .maritime-shipment-list table {
     min-width: 740px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-content {
+    max-width: 95vw;
   }
 }

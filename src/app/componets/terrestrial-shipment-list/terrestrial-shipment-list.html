@@ -19,6 +19,7 @@
           <th scope="col">Guía</th>
           <th scope="col">Destino</th>
           <th scope="col">Origen</th>
+          <th scope="col">Estado</th>
           <th scope="col">Acciones</th>
         </tr>
       </thead>
@@ -31,7 +32,18 @@
             <td>{{ getOrigin(shipment) }}</td>
             <td>{{ getDestination(shipment) }}</td>
             <td>
-              <button type="button" (click)="openDetails(shipment)" class="btn btn-info">Ver todo</button>
+              <span
+                class="status-pill"
+                [class.status-pill-transit]="isTransitStatus(shipment.status)"
+                [class.status-pill-delivered]="isDeliveredStatus(shipment.status)"
+                [class.status-pill-delayed]="isDelayedStatus(shipment.status)"
+                [class.status-pill-pending]="isPendingStatus(shipment.status)"
+                >{{ shipment.status }}</span
+              >
+            </td>
+            <td>
+
+              <button type="button" (click)="openDetails(shipment)" class="btn btn-info">Ver</button>
               <a routerLink="/terrestrial_shipments/edit/{{ shipment.id }}" class="btn btn-secondary">Editar</a>
               <button type="button" (click)="deleteShipment(shipment.id)" class="btn btn-danger">Eliminar</button>
             </td>
@@ -113,7 +125,14 @@
             </div>
             <div class="detail-item">
               <label>Estado:</label>
-              <span>{{ shipment.status }}</span>
+              <span
+                class="status-pill"
+                [class.status-pill-transit]="isTransitStatus(shipment.status)"
+                [class.status-pill-delivered]="isDeliveredStatus(shipment.status)"
+                [class.status-pill-delayed]="isDelayedStatus(shipment.status)"
+                [class.status-pill-pending]="isPendingStatus(shipment.status)"
+                >{{ shipment.status }}</span
+              >
             </div>
           </div>
         </div>

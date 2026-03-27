@@ -17,10 +17,12 @@ export class BodegaList {
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
 
+  // Carga inicial de datos al abrir la vista.
   constructor() {
     this.listBodegas();
   }
 
+  // Consulta la lista de bodegas y actualiza estados de carga/error.
   listBodegas(): void {
     this.loading.set(true);
     this.error.set(null);
@@ -41,6 +43,7 @@ export class BodegaList {
     });
   }
 
+  // Elimina una bodega y refresca la lista para mantener la vista sincronizada.
   deleteBodega(id: number): void {
     this.bodegaService.deleteBodega(id).subscribe(
       () => this.listBodegas(),

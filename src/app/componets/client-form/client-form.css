@@ -1,20 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap');
 
 :host {
-	--form-bg-1: #fff7ed;
-	--form-bg-2: #ffedd5;
-	--form-surface: #fffdfa;
-	--form-border: #fed7aa;
-	--form-text: #1f2937;
-	--form-muted: #6b7280;
-	--form-accent: #ea580c;
-	--form-accent-hover: #c2410c;
-	--form-success-bg: #ecfdf3;
-	--form-success-text: #166534;
-	--form-success-border: #86efac;
-	--form-error-bg: #fff1f2;
-	--form-error-text: #b91c1c;
-	--form-error-border: #fda4af;
+	--form-bg-1: #ffffff;
+	--form-bg-2: #f6f9fc;
+	--form-surface: #ffffff;
+	--form-border: #d8e2ee;
+	--form-text: #223243;
+	--form-muted: #5b6774;
+	--form-accent: #1f6feb;
+	--form-accent-hover: #1d4ed8;
+	--form-success-bg: #edf5ef;
+	--form-success-text: #2f5a3a;
+	--form-success-border: #b8cbbd;
+	--form-error-bg: #f7e9e9;
+	--form-error-text: #8a3e3e;
+	--form-error-border: #d8b6b6;
 
 	display: block;
 	font-family: 'Manrope', 'Segoe UI', sans-serif;
@@ -28,10 +28,10 @@
 	border: 1px solid var(--form-border);
 	border-radius: 20px;
 	background:
-		radial-gradient(circle at 85% -5%, rgba(234, 88, 12, 0.12), transparent 32%),
+		radial-gradient(circle at 85% -5%, rgba(47, 75, 102, 0.12), transparent 32%),
 		linear-gradient(135deg, var(--form-bg-1), var(--form-bg-2));
 	box-shadow:
-		0 14px 30px rgba(148, 63, 0, 0.16),
+		0 14px 30px rgba(31, 47, 62, 0.14),
 		inset 0 0 0 1px rgba(255, 255, 255, 0.7);
 	animation: form-enter 320ms ease-out;
 }
@@ -58,7 +58,7 @@
 
 .form-group input {
 	width: 100%;
-	border: 1px solid #fdba74;
+	border: 1px solid #b6c6d8;
 	border-radius: 12px;
 	background: var(--form-surface);
 	color: var(--form-text);
@@ -72,13 +72,13 @@
 }
 
 .form-group input:hover {
-	border-color: #fb923c;
+	border-color: #7aa2d5;
 }
 
 .form-group input:focus-visible {
 	outline: none;
 	border-color: var(--form-accent);
-	box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.24);
+	box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.24);
 	transform: translateY(-1px);
 }
 
@@ -122,7 +122,7 @@
 	border: none;
 	border-radius: 12px;
 	margin-top: 0.35rem;
-	background: linear-gradient(135deg, var(--form-accent), #f97316);
+	background: linear-gradient(135deg, var(--form-accent), #3b82f6);
 	color: #ffffff;
 	font-size: 0.96rem;
 	font-weight: 800;
@@ -134,12 +134,12 @@
 
 .client-form button:hover:not(:disabled) {
 	transform: translateY(-1px);
-	box-shadow: 0 9px 18px rgba(154, 52, 18, 0.32);
-	background: linear-gradient(135deg, var(--form-accent-hover), #ea580c);
+	box-shadow: 0 9px 18px rgba(37, 99, 235, 0.32);
+	background: linear-gradient(135deg, var(--form-accent-hover), #2563eb);
 }
 
 .client-form button:focus-visible {
-	outline: 3px solid rgba(194, 65, 12, 0.35);
+	outline: 3px solid rgba(47, 75, 102, 0.35);
 	outline-offset: 2px;
 }
 

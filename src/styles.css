@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global palette and base styles */
+:root {
+	--ui-ivory: #f6f1e7;
+	--ui-ivory-soft: #efe7d8;
+	--ui-panel: #fcf8f1;
+	--ui-border: #cdbfa8;
+	--ui-text: #223243;
+	--ui-muted: #596573;
+	--ui-primary-1: #2f4b66;
+	--ui-primary-2: #3f627f;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+	background: linear-gradient(165deg, var(--ui-ivory), var(--ui-ivory-soft));
+	color: var(--ui-text);
+}

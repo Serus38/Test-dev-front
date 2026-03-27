@@ -1,0 +1,65 @@
+<div class="login-container">
+  <div class="login-box">
+    <h1>Test Dev API</h1>
+    <h2>Iniciar Sesión</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- Error Message -->
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+
+      <!-- Username -->
+      <div class="mb-3">
+        <label for="username" class="form-label">Usuario</label>
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          formControlName="username"
+          [class.is-invalid]="submitted && f['username'].errors"
+        />
+        <div *ngIf="submitted && f['username'].errors" class="invalid-feedback d-block">
+          <span *ngIf="f['username'].errors['required']">El usuario es requerido</span>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          formControlName="password"
+          [class.is-invalid]="submitted && f['password'].errors"
+        />
+        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback d-block">
+          <span *ngIf="f['password'].errors['required']">La contraseña es requerida</span>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn btn-primary w-100"
+        [disabled]="loading"
+      >
+        <span *ngIf="!loading">Ingresar</span>
+        <span *ngIf="loading">
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          Cargando...
+        </span>
+      </button>
+    </form>
+
+    <!-- Demo Credentials -->
+    <div class="demo-info mt-4 p-3 bg-light rounded">
+      <small>
+        <strong>Credenciales de prueba:</strong><br>
+        Usuario: <code>admin</code><br>
+        Contraseña: <code>password123</code>
+      </small>
+    </div>
+  </div>
+</div>

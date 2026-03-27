@@ -4,19 +4,23 @@
 
 .maritime-shipment-form {
   position: relative;
-  max-width: 620px;
+  max-width: 680px;
   margin: 1rem auto;
   padding: 1.75rem;
-  border: 1px solid #bae6fd;
+  border: 1px solid #d8e2ee;
   border-radius: 20px;
   background:
-    radial-gradient(circle at 85% -5%, rgba(3, 105, 161, 0.14), transparent 32%),
-    linear-gradient(135deg, #eff6ff, #e0f2fe);
+    radial-gradient(circle at 85% -5%, rgba(47, 75, 102, 0.09), transparent 32%),
+    linear-gradient(135deg, #ffffff, #f6f9fc);
+    box-shadow:
+		0 14px 30px rgba(31, 47, 62, 0.14),
+		inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+	animation: list-enter 320ms ease-out;
 }
 
 .maritime-shipment-form > h2 {
   margin: 0 0 1.1rem;
-  color: #082f49;
+  color: #223243;
   font-size: clamp(1.25rem, 2.8vw, 1.7rem);
 }
 
@@ -27,27 +31,27 @@
 .form-group label {
   display: inline-block;
   margin-bottom: 0.4rem;
-  color: #0f172a;
+  color: #223243;
   font-size: 0.93rem;
   font-weight: 700;
 }
 
 .form-group input {
   width: 100%;
-  border: 1px solid #7dd3fc;
+  border: 1px solid #b6c6d8;
   border-radius: 12px;
   background: #ffffff;
-  color: #0f172a;
+  color: #223243;
   padding: 0.78rem 0.9rem;
   font-size: 0.95rem;
 }
 
 .form-group select {
   width: 100%;
-  border: 1px solid #7dd3fc;
+  border: 1px solid #b6c6d8;
   border-radius: 12px;
   background-color: #ffffff;
-  color: #0f172a;
+  color: #223243;
   padding: 0.78rem 2.35rem 0.78rem 0.9rem;
   font-size: 0.95rem;
   font-family: inherit;
@@ -55,8 +59,8 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   background-image:
-    linear-gradient(45deg, transparent 50%, #0369a1 50%),
-    linear-gradient(135deg, #0369a1 50%, transparent 50%);
+    linear-gradient(45deg, transparent 50%, #2f4b66 50%),
+    linear-gradient(135deg, #2f4b66 50%, transparent 50%);
   background-position:
     calc(100% - 18px) calc(50% - 3px),
     calc(100% - 12px) calc(50% - 3px);
@@ -67,14 +71,39 @@
 
 .form-group input:focus-visible,
 .form-group select:focus-visible {
-  outline: 3px solid rgba(3, 105, 161, 0.28);
+  outline: 3px solid rgba(47, 75, 102, 0.28);
   outline-offset: 1px;
-  border-color: #0ea5e9;
+  border-color: #3f627f;
 }
 
 .form-group select:hover {
-  border-color: #0ea5e9;
+  border-color: #768da2;
 }
+
+.form-group input.invalid,
+.form-group select.invalid {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.form-group input.invalid:focus-visible,
+.form-group select.invalid:focus-visible {
+  outline: 3px solid rgba(220, 38, 38, 0.25);
+  border-color: #dc2626;
+}
+
+.error-text {
+  display: block;
+  margin-top: 0.35rem;
+  color: #dc2626;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+#fleetNumber {
+  text-transform: uppercase;
+}
+
 
 .error,
 .error-message,
@@ -100,15 +129,27 @@
 }
 
 .error-message {
-  border-color: #fda4af;
-  background: #fff1f2;
-  color: #b91c1c;
+  border-color: #d8b6b6;
+  background: #f7e9e9;
+  color: #8a3e3e;
 }
 
 .success-message {
-  border-color: #86efac;
-  background: #ecfdf3;
-  color: #166534;
+  border-color: #b8cbbd;
+  background: #edf5ef;
+  color: #2f5a3a;
+}
+
+@keyframes list-enter {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .maritime-shipment-form button {
@@ -116,7 +157,7 @@
   border: none;
   border-radius: 12px;
   margin-top: 0.35rem;
-  background: linear-gradient(135deg, #0369a1, #0ea5e9);
+  background: linear-gradient(135deg, #1f6feb, #3b82f6);
   color: #ffffff;
   font-size: 0.96rem;
   font-weight: 800;
@@ -127,11 +168,11 @@
 
 .maritime-shipment-form button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 9px 18px rgba(8, 47, 73, 0.32);
+  box-shadow: 0 9px 18px rgba(37, 99, 235, 0.32);
 }
 
 .maritime-shipment-form button:focus-visible {
-  outline: 3px solid rgba(3, 105, 161, 0.35);
+  outline: 3px solid rgba(31, 111, 235, 0.35);
   outline-offset: 2px;
 }
 
@@ -142,26 +183,12 @@
   transform: none;
 }
 
+
+
 @media (max-width: 640px) {
   .maritime-shipment-form {
     margin: 0.5rem;
     padding: 1.25rem;
     border-radius: 16px;
   }
-}
-
-.btn {
-	display: inline-block;
-	border: none;
-	border-radius: 10px;
-	padding: 0.54rem 0.92rem;
-	font-size: 0.88rem;
-	font-weight: 700;
-	cursor: pointer;
-	transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
-	white-space: nowrap;
-	text-decoration: none;
-	text-align: center;
-	vertical-align: middle;
-	margin-right: 0.32rem;
 }

@@ -10,21 +10,32 @@ import { MaritimeShipmentList } from './componets/maritime-shipment-list/maritim
 import { MaritimeShipmentForm } from './componets/maritime-shipment-form/maritime-shipment-form';
 import { TerrestrialShipmentList } from './componets/terrestrial-shipment-list/terrestrial-shipment-list';
 import { TerrestrialShipmentForm } from './componets/terrestrial-shipment-form/terrestrial-shipment-form';
+import { Dashboard } from './componets/dashboard/dashboard';
+import { Login } from './componets/login/login';
+import { AuthGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
-	{ path: '', component: ClientList },
-	{ path: 'add-client', component: ClientForm },
-	{ path: 'edit-client/:id', component: ClientForm },
-	{ path: 'bodegas', component: BodegaList },
-	{ path: 'bodegas/new', component: BodegaForm },
-	{ path: 'bodegas/edit/:id', component: BodegaForm },
-	{ path: 'puertos', component: PortList },
-	{ path: 'puertos/new', component: PortForm },
-	{ path: 'puertos/edit/:id', component: PortForm },
-	{ path: 'maritime_shipments', component: MaritimeShipmentList },
-	{ path: 'maritime_shipments/new', component: MaritimeShipmentForm },
-	{ path: 'maritime_shipments/edit/:id', component: MaritimeShipmentForm },
-	{ path: 'terrestrial_shipments', component: TerrestrialShipmentList },
-	{ path: 'terrestrial_shipments/new', component: TerrestrialShipmentForm },
-	{ path: 'terrestrial_shipments/edit/:id', component: TerrestrialShipmentForm },
+	// Ruta publica de autenticacion.
+	{ path: 'login', component: Login },
+	// Redireccion inicial al dashboard.
+	{ path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+	// Rutas protegidas por autenticacion JWT.
+	{ path: 'dashboard', component: Dashboard, canActivate: [AuthGuard] },
+	{ path: 'clientes', component: ClientList, canActivate: [AuthGuard] },
+	{ path: 'add-client', component: ClientForm, canActivate: [AuthGuard] },
+	{ path: 'edit-client/:id', component: ClientForm, canActivate: [AuthGuard] },
+	{ path: 'bodegas', component: BodegaList, canActivate: [AuthGuard] },
+	{ path: 'bodegas/new', component: BodegaForm, canActivate: [AuthGuard] },
+	{ path: 'bodegas/edit/:id', component: BodegaForm, canActivate: [AuthGuard] },
+	{ path: 'puertos', component: PortList, canActivate: [AuthGuard] },
+	{ path: 'puertos/new', component: PortForm, canActivate: [AuthGuard] },
+	{ path: 'puertos/edit/:id', component: PortForm, canActivate: [AuthGuard] },
+	{ path: 'maritime_shipments', component: MaritimeShipmentList, canActivate: [AuthGuard] },
+	{ path: 'maritime_shipments/new', component: MaritimeShipmentForm, canActivate: [AuthGuard] },
+	{ path: 'maritime_shipments/edit/:id', component: MaritimeShipmentForm, canActivate: [AuthGuard] },
+	{ path: 'terrestrial_shipments', component: TerrestrialShipmentList, canActivate: [AuthGuard] },
+	{ path: 'terrestrial_shipments/new', component: TerrestrialShipmentForm, canActivate: [AuthGuard] },
+	{ path: 'terrestrial_shipments/edit/:id', component: TerrestrialShipmentForm, canActivate: [AuthGuard] },
+	// Fallback global.
+	{ path: '**', redirectTo: 'dashboard' },
 ];

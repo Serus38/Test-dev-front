@@ -13,24 +13,30 @@ export type TerrestrialShipmentUpsertInput = Omit<
 })
 export class TerrestrialShipmentService {
   private readonly http = inject(HttpClient);
+  // Endpoint base para el modulo de envios terrestres.
   private readonly api = 'http://localhost:8081/terrestrial-shipment';
 
+  // Obtiene todos los envios terrestres.
   getTerrestrialShipmentList(): Observable<TerrestrialShipment[]> {
     return this.http.get<TerrestrialShipment[]>(`${this.api}/getAll`);
   }
 
+  // Crea un envio terrestre.
   createTerrestrialShipment(shipment: TerrestrialShipmentUpsertInput): Observable<TerrestrialShipment> {
     return this.http.post<TerrestrialShipment>(`${this.api}/save`, shipment);
   }
 
+  // Elimina un envio terrestre por id.
   deleteTerrestrialShipment(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/delete/${id}`);
   }
 
+  // Consulta un envio terrestre por id.
   getTerrestrialShipmentById(id: number): Observable<TerrestrialShipment> {
     return this.http.get<TerrestrialShipment>(`${this.api}/get/${id}`);
   }
 
+  // Actualiza un envio terrestre existente.
   updateTerrestrialShipment(id: number, shipment: TerrestrialShipmentUpsertInput): Observable<TerrestrialShipment> {
     return this.http.put<TerrestrialShipment>(`${this.api}/edit/${id}`, shipment);
   }

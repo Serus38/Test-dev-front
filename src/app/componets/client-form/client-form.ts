@@ -34,6 +34,7 @@ export class ClientForm implements OnInit {
     address: ['', Validators.required],
   });
 
+  // Detecta si la ruta trae id para activar modo edicion.
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id) {
@@ -44,6 +45,7 @@ export class ClientForm implements OnInit {
     }
   }
 
+  // Carga datos del cliente seleccionado y rellena el formulario.
   private loadClientData(id: number): void {
     this.loading.set(true);
     this.clientService.getClientById(id).subscribe({
@@ -63,6 +65,7 @@ export class ClientForm implements OnInit {
     });
   }
 
+  // Valida, construye payload y ejecuta create/update segun modo.
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();

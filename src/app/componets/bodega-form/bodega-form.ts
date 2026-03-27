@@ -33,6 +33,7 @@ export class BodegaForm implements OnInit {
     city: ['', [Validators.required, Validators.minLength(3)]],
   });
 
+  // Identifica si se abre en modo edicion segun parametro de ruta.
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id) {
@@ -43,6 +44,7 @@ export class BodegaForm implements OnInit {
     }
   }
 
+  // Carga la bodega seleccionada y llena controles del formulario.
   private loadBodegaData(id: number): void {
     this.loading.set(true);
     this.bodegaService.getBodegaById(id).subscribe({
@@ -61,6 +63,7 @@ export class BodegaForm implements OnInit {
     });
   }
 
+  // Ejecuta creacion/actualizacion tras validar campos requeridos.
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();

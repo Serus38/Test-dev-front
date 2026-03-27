@@ -17,10 +17,12 @@ export class PortList {
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
 
+  // Carga inicial de puertos al abrir la vista.
   constructor() {
     this.listPorts();
   }
 
+  // Consulta puertos y maneja estados de carga/error para la tabla.
   listPorts(): void {
     this.loading.set(true);
     this.error.set(null);
@@ -41,6 +43,7 @@ export class PortList {
     });
   }
 
+  // Elimina un puerto y vuelve a consultar la lista.
   deletePort(id: number): void {
     this.portService.deletePort(id).subscribe(
       () => this.listPorts(),

@@ -1,0 +1,189 @@
+<section class="dashboard" aria-labelledby="dashboard-title">
+  <header class="dashboard-header">
+    <div>
+      <h1 id="dashboard-title">Dashboard de Seguimiento</h1>
+      <p>Visibilidad de envios maritimos y terrestres en un solo panel.</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="loadDashboard()">Actualizar</button>
+  </header>
+
+  @if (lastUpdated(); as updatedAt) {
+    <p class="last-update">Ultima actualizacion: {{ formatDate(updatedAt.toISOString()) }}</p>
+  }
+
+  @if (loading()) {
+    <p class="state">Cargando metricas y envios...</p>
+  } @else if (error()) {
+    <p class="state error" role="alert">{{ error() }}</p>
+  } @else {
+    <section class="kpi-grid" aria-label="Metricas clave">
+      <article class="kpi-card">
+        <h2>Total envios</h2>
+        <p>{{ metrics().total }}</p>
+      </article>
+      <article class="kpi-card">
+        <h2>En transito</h2>
+        <p>{{ metrics().inTransit }}</p>
+      </article>
+      <article class="kpi-card">
+        <h2>Entregados</h2>
+        <p>{{ metrics().delivered }}</p>
+      </article>
+      <article class="kpi-card">
+        <h2>Retrasados</h2>
+        <p>{{ metrics().delayed }}</p>
+      </article>
+      <article class="kpi-card">
+        <h2>Cumplimiento</h2>
+        <p>{{ metrics().compliance }}%</p>
+      </article>
+    </section>
+
+    <section class="filters" aria-label="Filtros de seguimiento">
+      <label>
+        Buscar
+        <input
+          type="text"
+          [value]="searchQuery()"
+          (input)="onSearchInput($event)"
+          placeholder="Guia, origen, destino o estado"
+        />
+      </label>
+
+      <label>
+        Tipo
+        <select [value]="modeFilter()" (change)="onModeFilterChange($event)">
+          <option value="Todos">Todos</option>
+          <option value="Maritimo">Maritimo</option>
+          <option value="Terrestre">Terrestre</option>
+        </select>
+      </label>
+
+      <label>
+        Estado
+        <select [value]="statusFilter()" (change)="onStatusFilterChange($event)">
+          <option value="Todos">Todos</option>
+          <option value="En transito">En transito</option>
+          <option value="Entregado">Entregado</option>
+          <option value="Retrasado">Retrasado</option>
+          <option value="Pendiente">Pendiente</option>
+        </select>
+      </label>
+    </section>
+
+    @if (alerts().length > 0) {
+      <section class="alerts" aria-label="Alertas">
+        <h2>Alertas</h2>
+        <ul>
+          @for (alert of alerts(); track alert) {
+            <li>{{ alert }}</li>
+          }
+        </ul>
+      </section>
+    }
+
+    <section class="table-wrap" aria-label="Tabla de seguimiento">
+      <table>
+        <caption>Ultimos movimientos (maximo 12 registros filtrados)</caption>
+        <thead>
+          <tr>
+            <th scope="col">Guia</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Origen</th>
+            <th scope="col">Destino</th>
+            <th scope="col">Registro</th>
+            <th scope="col">Entrega</th>
+            <th scope="col">Costo</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of visibleRows(); track row.trackId) {
+            <tr>
+              <td>{{ row.guideNumber }}</td>
+              <td>{{ row.mode }}</td>
+              <td>
+                <span
+                  class="status-pill"
+                  [class.status-pill-transit]="row.trackingStatus === 'En transito'"
+                  [class.status-pill-delivered]="row.trackingStatus === 'Entregado'"
+                  [class.status-pill-delayed]="row.trackingStatus === 'Retrasado'"
+                  [class.status-pill-pending]="row.trackingStatus === 'Pendiente'"
+                  >{{ row.trackingStatus }}</span
+                >
+              </td>
+              <td>{{ row.origin }}</td>
+              <td>{{ row.destination }}</td>
+              <td>{{ formatDate(row.registrationDate) }}</td>
+              <td>{{ formatDate(row.deliveryDate) }}</td>
+              <td>{{ formatCurrency(row.totalCost || row.shippingCost) }}</td>
+              <td>
+                <button type="button" class="btn btn-detail" (click)="openDetails(row)">Ver detalle</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (visibleRows().length === 0) {
+        <p class="state">No hay envios que cumplan los filtros actuales.</p>
+      }
+    </section>
+
+    @if (selectedRow(); as row) {
+      <div class="modal-overlay" (click)="closeDetails()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h2>Detalle del envio {{ row.trackId }}</h2>
+            <button type="button" class="btn-close" (click)="closeDetails()" aria-label="Cerrar detalle">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="details-grid">
+              <div class="detail-item">
+                <label>Guia</label>
+                <span>{{ row.guideNumber }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Tipo</label>
+                <span>{{ row.mode }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Estado normalizado</label>
+                <span>{{ row.trackingStatus }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Estado original</label>
+                <span>{{ row.status }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Origen</label>
+                <span>{{ row.origin }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Destino</label>
+                <span>{{ row.destination }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Fecha registro</label>
+                <span>{{ formatDate(row.registrationDate) }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Fecha entrega</label>
+                <span>{{ formatDate(row.deliveryDate) }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Costo envio</label>
+                <span>{{ formatCurrency(row.shippingCost) }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Costo total</label>
+                <span>{{ formatCurrency(row.totalCost) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</section>

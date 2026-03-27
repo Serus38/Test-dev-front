@@ -5,12 +5,12 @@
 
 .sidebar {
 	box-sizing: border-box;
-	width: 280px;
+	width: 215px;
 	height: 100%;
 	min-height: 100dvh;
 	padding: 22px 14px;
-	border-right: 1px solid #d6dce5;
-	background: linear-gradient(180deg, #5e6f81 0%, #9e9696 72%);
+	border-right: 1px solid #54697d;
+	background: linear-gradient(180deg, #3c536a 0%, #4c6378 55%, #5b6f82 100%);
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
@@ -19,7 +19,7 @@
 
 .brand {
 	display: block;
-	color: #16334f;
+	color: #eef3f8;
 	text-decoration: none;
 	font-size: 1.1rem;
 	font-weight: 700;
@@ -33,13 +33,17 @@
 	gap: 8px;
 }
 
+.dashboard-btn {
+	margin-bottom: 2px;
+}
+
 .extras {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
 	margin-top: 12px;
 	padding-top: 12px;
-	border-top: 1px solid #dce3ef;
+	border-top: 1px solid rgba(230, 238, 247, 0.35);
 }
 
 .menu-btn {
@@ -51,43 +55,45 @@
 	cursor: pointer;
 	text-decoration: none;
 	text-align: left;
-	color: #1a2735;
+	color: #eff4fa;
 	font-weight: 600;
 	font-size: 0.95rem;
 	padding: 10px 12px;
 	border-radius: 10px;
-	transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+	transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 
 .menu-btn:hover {
-	background-color: #e8f0ff;
+	background-color: rgba(233, 240, 248, 0.2);
 }
 
 .menu-btn.active {
-	background-color: #1663cc;
+	background: linear-gradient(135deg, #2f4b66, #3f627f);
 	color: #ffffff;
+	box-shadow: 0 6px 14px rgba(23, 39, 54, 0.28);
 }
 
 .menu-btn.secondary {
-	border-color: #cfd8e6;
-	background: #ffffff;
+	border-color: #8498ac;
+	background: rgba(243, 247, 251, 0.92);
+	color: #2f455a;
 }
 
 .menu-btn.secondary:hover {
-	border-color: #aebdd4;
-	background: #f2f7ff;
+	border-color: #95a7ba;
+	background: #e8eef5;
 }
 
 .menu-btn.secondary.active {
-	border-color: #1663cc;
-	background: #dce9ff;
-	color: #0f3f84;
+	border-color: #3f627f;
+	background: #d5e0ea;
+	color: #24384c;
 }
 
 .menu-btn:focus-visible,
 .brand:focus-visible {
-	outline: 3px solid #0e8f58;
+	outline: 3px solid #d9e5f1;
 	outline-offset: 2px;
 }
 
@@ -97,7 +103,7 @@
 		min-height: auto;
 		padding: 12px;
 		border-right: 0;
-		border-bottom: 1px solid #d6dce5;
+		border-bottom: 1px solid #54697d;
 	}
 }
 
@@ -115,4 +121,48 @@
 	text-align: center;
 	vertical-align: middle;
 	margin-right: 0.32rem;
+}
+
+.user-section {
+	margin-top: 2px;
+	padding: 10px 10px 12px;
+	border: 1px solid rgba(230, 238, 247, 0.35);
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.06);
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.user-info {
+	color: #eff4fa;
+}
+
+.user-info small {
+	display: block;
+	font-size: 0.75rem;
+	opacity: 0.8;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.user-info p {
+	margin: 4px 0 0 0;
+	font-weight: 600;
+	font-size: 0.95rem;
+	word-break: break-word;
+}
+
+.btn-danger {
+	background-color: #dc3545;
+	color: white;
+}
+
+.btn-danger:hover {
+	background-color: #c82333;
+}
+
+.btn-sm {
+	padding: 0.4rem 0.75rem;
+	font-size: 0.8rem;
 }

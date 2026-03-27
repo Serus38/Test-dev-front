@@ -1,56 +1,137 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="maritime-shipment-form">
-  <h2>@if (isEditMode()) { Editar Envio Maritimo } @else { Crear Nuevo Envio Maritimo }</h2>
+  <h2>@if (isEditMode()) { Editar Envio Marítimo } @else { Crear Nuevo Envio Marítimo }</h2>
 
   @if (error(); as err) {
     <div class="error-message" role="alert">{{ err }}</div>
   }
 
   @if (success()) {
-    <div class="success-message" role="status">Envio maritimo guardado exitosamente</div>
+    <div class="success-message" role="status">Envio marítimo guardado exitosamente</div>
   }
 
-  <div class="form-group"><label for="deliveryDate">Fecha entrega:</label><input id="deliveryDate" type="date" formControlName="deliveryDate" /></div>
   <div class="form-group">
-    <label for="destinationPort">Destino:</label>
-    <select id="destinationPort" [value]="form.controls.port_id.value" (change)="onDestinationChange($event)">
-      <option [value]="0">Seleccione un destino</option>
+    <label for="productType">Tipo de producto:</label>
+    <input id="productType" type="text" formControlName="productType" [class.invalid]="form.controls.productType.invalid && form.controls.productType.touched" />
+    @if (form.controls.productType.hasError('required') && form.controls.productType.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="quantity">Cantidad:</label>
+    <input id="quantity" type="number" formControlName="quantity" [class.invalid]="form.controls.quantity.invalid && form.controls.quantity.touched" />
+    @if (form.controls.quantity.hasError('required') && form.controls.quantity.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+    @if (form.controls.quantity.hasError('min') && form.controls.quantity.touched) {
+      <span class="error-text">La cantidad debe ser mayor o igual a 0</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <h3>Ubicaciones Puertos</h3>
+    <label for="originPort_id">Puerto origen:</label>
+    <select id="originPort_id" formControlName="originPort_id" [class.invalid]="form.controls.originPort_id.invalid && form.controls.originPort_id.touched">
+      <option [value]="0">Sin seleccionar</option>
       @for (port of ports(); track port.id) {
         <option [value]="port.id">{{ port.name }} - {{ port.city }}, {{ port.country }}</option>
       }
     </select>
+    @if (form.controls.originPort_id.hasError('required') && form.controls.originPort_id.touched) {
+      <span class="error-text">Debe seleccionar un puerto origen</span>
+    }
   </div>
 
-  <input type="hidden" formControlName="destination" />
-  <div class="form-group"><label for="discountRate">Descuento (%):</label><input id="discountRate" type="number" min="0" max="100" step="0.01" formControlName="discountRate" readonly /></div>
-  <div class="form-group"><label for="fleetNumber">Flota:</label><input id="fleetNumber" type="text" formControlName="fleetNumber" /></div>
-  <div class="form-group"><label for="guideNumber">Guía:</label><input id="guideNumber" type="text" formControlName="guideNumber" /></div>
-  <div class="form-group"><label for="origin">Origen:</label><input id="origin" type="text" formControlName="origin" /></div>
-  <div class="form-group"><label for="productType">Tipo producto:</label><input id="productType" type="text" formControlName="productType" /></div>
-  <div class="form-group"><label for="quantity">Cantidad:</label><input id="quantity" type="number" min="0" step="1" formControlName="quantity" /></div>
-  <div class="form-group"><label for="registrationDate">Fecha registro:</label><input id="registrationDate" type="date" formControlName="registrationDate" /></div>
-  <div class="form-group"><label for="shippingCost">Costo envío:</label><input id="shippingCost" type="number" min="0" step="0.01" formControlName="shippingCost" /></div>
-  <div class="form-group"><label for="status">Estado:</label><input id="status" type="text" formControlName="status" /></div>
-  <div class="form-group"><label for="totalCost">Costo total:</label><input id="totalCost" type="number" min="0" step="0.01" formControlName="totalCost" readonly /></div>
+  <div class="form-group">
+    <label for="destinationPort_id">Puerto destino:</label>
+    <select id="destinationPort_id" formControlName="destinationPort_id" [class.invalid]="form.controls.destinationPort_id.invalid && form.controls.destinationPort_id.touched">
+      <option [value]="0">Sin seleccionar</option>
+      @for (port of ports(); track port.id) {
+        <option [value]="port.id">{{ port.name }} - {{ port.city }}, {{ port.country }}</option>
+      }
+    </select>
+    @if (form.controls.destinationPort_id.hasError('required') && form.controls.destinationPort_id.touched) {
+      <span class="error-text">Debe seleccionar un puerto destino</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="registrationDate">Fecha registro:</label>
+    <input id="registrationDate" type="date" formControlName="registrationDate" [class.invalid]="form.controls.registrationDate.invalid && form.controls.registrationDate.touched" />
+    @if (form.controls.registrationDate.hasError('required') && form.controls.registrationDate.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="deliveryDate">Fecha entrega:</label>
+    <input id="deliveryDate" type="date" formControlName="deliveryDate" [class.invalid]="form.controls.deliveryDate.invalid && form.controls.deliveryDate.touched" />
+    @if (form.controls.deliveryDate.hasError('required') && form.controls.deliveryDate.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+  </div>
+
   <div class="form-group">
     <label for="client_id">Cliente:</label>
-    <select id="client_id" formControlName="client_id">
+    <select id="client_id" formControlName="client_id" [class.invalid]="form.controls.client_id.invalid && form.controls.client_id.touched">
       <option [value]="0">Seleccione un cliente</option>
       @for (client of clients(); track client.id) {
         <option [value]="client.id">{{ client.name }}</option>
       }
     </select>
+    @if (form.controls.client_id.hasError('required') && form.controls.client_id.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+    @if (form.controls.client_id.hasError('min') && form.controls.client_id.touched) {
+      <span class="error-text">Debe seleccionar un cliente válido</span>
+    }
   </div>
 
   <div class="form-group">
-    <label for="port_id">Puerto:</label>
-    <select id="port_id" formControlName="port_id" (change)="onPortChange($event)">
-      <option [value]="0">Seleccione un puerto</option>
-      @for (port of ports(); track port.id) {
-        <option [value]="port.id">{{ port.name }} - {{ port.city }}</option>
-      }
+    <label for="shippingCost">Costo envío:</label>
+    <input
+      id="shippingCost"
+      type="text"
+      inputmode="numeric"
+      formControlName="shippingCost"
+      (input)="onShippingCostInput($event)"
+      [class.invalid]="form.controls.shippingCost.invalid && form.controls.shippingCost.touched"
+    />
+    @if (form.controls.shippingCost.hasError('required') && form.controls.shippingCost.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+    @if (form.controls.shippingCost.hasError('min') && form.controls.shippingCost.touched) {
+      <span class="error-text">El costo debe ser mayor o igual a 0</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="fleetNumber">Numero de flota:</label>
+    <input
+      id="fleetNumber"
+      type="text"
+      formControlName="fleetNumber"
+      (input)="form.controls.fleetNumber.setValue(($any($event.target).value || '').toUpperCase(), { emitEvent: false })"
+      [class.invalid]="form.controls.fleetNumber.invalid && form.controls.fleetNumber.touched"
+    />
+    @if (form.controls.fleetNumber.hasError('required') && form.controls.fleetNumber.touched) {
+      <span class="error-text">Este campo es requerido</span>
+    }
+    @if (form.controls.fleetNumber.hasError('pattern') && form.controls.fleetNumber.touched) {
+      <span class="error-text">Formato: 3 letras, 3 números y 1 letra (ej: ABC123D)</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="status">Estado:</label>
+    <select id="status" formControlName="status">
+      <option [value]="''">Seleccione un estado</option>
+      <option value="PENDING">PENDIENTE</option>
+      <option value="IN_TRANSIT">EN TRANSITO</option>
+      <option value="DELIVERED">ENTREGADO</option>
+      <option value="CANCELLED">CANCELADO</option>
     </select>
   </div>
-  <div class="form-group"><label for="qr_code">QR:</label><input id="qr_code" type="text" formControlName="qr_code" /></div>
 
   <button type="submit" [disabled]="form.invalid || loading()">
     @if (loading()) {

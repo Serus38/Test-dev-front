@@ -2,8 +2,10 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter, map, startWith } from 'rxjs/operators';
+import { AuthService } from '../../service/auth.service';
 
 type SectionKey =
+  | 'dashboard'
   | 'clientes'
   | 'bodegas'
   | 'terrestrial_shipments'
@@ -28,14 +30,23 @@ type NavSection = {
 })
 export class Navbar {
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+
+  // Estado de sesion y usuario para renderizar acciones del navbar.
+  readonly isLoggedIn = toSignal(this.authService.isLoggedIn$, {
+    initialValue: this.authService.isAuthenticated(),
+  });
+  readonly user = toSignal(this.authService.user$, {
+    initialValue: this.authService.getUsername(),
+  });
 
   readonly sections: ReadonlyArray<NavSection> = [
-    {
+       {
       key: 'clientes',
       label: 'Clientes',
       listLabel: 'Listar clientes',
       newLabel: 'Nuevo cliente',
-      listPath: '/',
+      listPath: '/clientes',
       newPath: '/add-client',
     },
     {
@@ -72,6 +83,8 @@ export class Navbar {
     },
   ];
 
+  readonly secondarySections: ReadonlyArray<NavSection> = this.sections.filter((section) => section.key !== 'dashboard');
+
   private readonly url = toSignal(
     this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
@@ -83,7 +96,11 @@ export class Navbar {
 
   readonly activeSection = computed(() => this.resolveSection(this.url()));
 
+  // Resuelve la seccion activa segun la URL actual.
   private resolveSection(url: string): NavSection {
+    if (url.startsWith('/clientes')) {
+      return this.sections[0];
+    }
     if (url.startsWith('/bodegas')) {
       return this.sections[1];
     }
@@ -97,5 +114,11 @@ export class Navbar {
       return this.sections[4];
     }
     return this.sections[0];
+  }
+
+  // Cierra sesion y retorna a la pantalla de autenticacion.
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
