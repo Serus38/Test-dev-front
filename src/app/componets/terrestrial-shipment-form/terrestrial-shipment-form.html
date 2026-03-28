@@ -11,7 +11,12 @@
 
   <div class="form-group">
     <label for="productType">Tipo de producto:</label>
-    <input id="productType" type="text" formControlName="productType" [class.invalid]="form.controls.productType.invalid && form.controls.productType.touched" />
+    <input 
+      id="productType"
+      type="text"
+      formControlName="productType"
+      placeholder="Ejemplo (Electrodomesticos)"
+      [class.invalid]="form.controls.productType.invalid && form.controls.productType.touched" />
     @if (form.controls.productType.hasError('required') && form.controls.productType.touched) {
       <span class="error-text">Este campo es requerido</span>
     }
@@ -156,6 +161,7 @@
       id="vehiclePlate"
       type="text"
       formControlName="vehiclePlate"
+      placeholder="ABC1234"
       (input)="form.controls.vehiclePlate.setValue(($any($event.target).value || '').toUpperCase(), { emitEvent: false })"
       [class.invalid]="form.controls.vehiclePlate.invalid && form.controls.vehiclePlate.touched"
     />

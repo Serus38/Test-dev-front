@@ -27,7 +27,7 @@
         @for (shipment of shipments(); track shipment.id) {
           <tr>
             <td>{{ shipment.id }}</td>
-            <td>{{formatDate(shipment.deliveryDate) }}</td>
+            <td>{{ formatDate(shipment.deliveryDate) }}</td>
             <td>{{ shipment.guideNumber }}</td>
             <td>{{ getDestination(shipment) }}</td>
             <td>{{ getOrigin(shipment) }}</td>

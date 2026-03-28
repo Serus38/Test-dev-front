@@ -99,7 +99,7 @@ export class ClientForm implements OnInit {
           }
           this.success.set(true);
           this.clientCreated.emit(client);
-          setTimeout(() => void this.router.navigate(['/'], { replaceUrl: true }), 800);
+          setTimeout(() => void this.router.navigate(['/clientes'], { replaceUrl: true }), 800);
         },
         error: (err: HttpErrorResponse | Error) => {
           if (err instanceof HttpErrorResponse) {

@@ -55,7 +55,7 @@ export class TerrestrialShipmentForm implements OnInit {
     registrationDate: ['', Validators.required],
     deliveryDate: ['', Validators.required],
     client_id: [0, [Validators.required, Validators.min(1)]],
-    shippingCost: [0, [Validators.required, Validators.min(0)]],
+    shippingCost: ['', [Validators.required, Validators.min(0)]],
     discountRate: [0],
     totalCost: [0],
     guideNumber: [''],
@@ -191,7 +191,7 @@ export class TerrestrialShipmentForm implements OnInit {
           registrationDate: shipment.registrationDate,
           deliveryDate: shipment.deliveryDate,
           client_id: Number(shipment.client.id),
-          shippingCost: Number(shipment.shippingCost),
+          shippingCost: String(Number(shipment.shippingCost)),
           discountRate: Number(shipment.discountRate),
           totalCost: Number(shipment.totalCost),
           guideNumber: shipment.guideNumber,
@@ -250,7 +250,7 @@ export class TerrestrialShipmentForm implements OnInit {
               registrationDate: '',
               deliveryDate: '',
               client_id: 0,
-              shippingCost: 0,
+              shippingCost: '',
               discountRate: 0,
               totalCost: 0,
               guideNumber: '',
@@ -292,13 +292,13 @@ export class TerrestrialShipmentForm implements OnInit {
     const digits = (input.value ?? '').replace(/\D/g, '');
 
     if (!digits) {
-      this.form.controls.shippingCost.setValue(0, { emitEvent: false });
+      this.form.controls.shippingCost.setValue('', { emitEvent: false });
       input.value = '';
       return;
     }
 
     const numericValue = Number(digits);
-    this.form.controls.shippingCost.setValue(numericValue, { emitEvent: false });
+    this.form.controls.shippingCost.setValue(String(numericValue), { emitEvent: false });
     input.value = new Intl.NumberFormat('es-CO').format(numericValue);
   }
 }

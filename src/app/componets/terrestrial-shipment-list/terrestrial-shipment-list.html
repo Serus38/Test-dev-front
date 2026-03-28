@@ -27,7 +27,7 @@
         @for (shipment of shipments(); track shipment.id) {
           <tr>
             <td>{{ shipment.id }}</td>
-            <td>{{ shipment.deliveryDate }}</td>
+            <td>{{ formatDate(shipment.deliveryDate) }}</td>
             <td>{{ shipment.guideNumber }}</td>
             <td>{{ getOrigin(shipment) }}</td>
             <td>{{ getDestination(shipment) }}</td>
@@ -93,11 +93,11 @@
             </div>
             <div class="detail-item">
               <label>Fecha de Registro:</label>
-              <span>{{ shipment.registrationDate }}</span>
+              <span>{{ formatDate(shipment.registrationDate) }}</span>
             </div>
             <div class="detail-item">
               <label>Fecha de Entrega:</label>
-              <span>{{ shipment.deliveryDate }}</span>
+              <span>{{ formatDate(shipment.deliveryDate) }}</span>
             </div>
             <div class="detail-item">
               <label>Cliente ID:</label>
@@ -105,7 +105,7 @@
             </div>
             <div class="detail-item">
               <label>Costo de Envío:</label>
-              <span>${{ shipment.shippingCost }}</span>
+              <span>{{ formatCurrency(shipment.shippingCost) }}</span>
             </div>
             <div class="detail-item">
               <label>Descuento (%):</label>

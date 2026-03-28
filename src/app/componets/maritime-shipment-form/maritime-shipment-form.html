@@ -11,7 +11,12 @@
 
   <div class="form-group">
     <label for="productType">Tipo de producto:</label>
-    <input id="productType" type="text" formControlName="productType" [class.invalid]="form.controls.productType.invalid && form.controls.productType.touched" />
+    <input 
+      id="productType"
+      type="text" 
+      formControlName="productType"
+      placeholder="Ejemplo (Electrodomesticos)"
+      [class.invalid]="form.controls.productType.invalid && form.controls.productType.touched" />
     @if (form.controls.productType.hasError('required') && form.controls.productType.touched) {
       <span class="error-text">Este campo es requerido</span>
     }
@@ -111,6 +116,7 @@
       id="fleetNumber"
       type="text"
       formControlName="fleetNumber"
+      placeholder="ABC1234D"
       (input)="form.controls.fleetNumber.setValue(($any($event.target).value || '').toUpperCase(), { emitEvent: false })"
       [class.invalid]="form.controls.fleetNumber.invalid && form.controls.fleetNumber.touched"
     />
@@ -118,7 +124,7 @@
       <span class="error-text">Este campo es requerido</span>
     }
     @if (form.controls.fleetNumber.hasError('pattern') && form.controls.fleetNumber.touched) {
-      <span class="error-text">Formato: 3 letras, 3 números y 1 letra (ej: ABC123D)</span>
+      <span class="error-text">Formato: 3 letras, 4 números y 1 letra (ej: ABC1234D)</span>
     }
   </div>
 
