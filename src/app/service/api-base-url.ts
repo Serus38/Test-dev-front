@@ -8,7 +8,7 @@ const importMeta = import.meta as ImportMeta & {
 };
 
 const configuredApiBaseUrl = (
-  importMeta.env?.NG_APP_API_URL ?? importMeta.env?.VITE_API_URL ?? 'test-dev-production-a619.up.railway.app'
+  importMeta.env?.NG_APP_API_URL ?? importMeta.env?.VITE_API_URL ?? ''
 ).trim();
 
 export const API_BASE_URL = configuredApiBaseUrl.replace(/\/$/, '');
