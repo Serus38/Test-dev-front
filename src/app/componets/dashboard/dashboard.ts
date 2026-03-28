@@ -192,7 +192,8 @@ export class Dashboard {
       this.statusFilter.set(value);
     }
   }
-
+  
+  // Formatea fechas a formato local legible para mostrar en tabla y detalle.
   formatDate(dateValue: string): string {
     const timestamp = this.toTimestamp(dateValue);
     if (timestamp === 0) {
@@ -206,6 +207,7 @@ export class Dashboard {
     });
   }
 
+  // Formatea números a moneda local para mostrar en el detalle.
   formatCurrency(value: number): string {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',

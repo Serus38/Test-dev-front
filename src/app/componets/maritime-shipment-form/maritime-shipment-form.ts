@@ -56,7 +56,7 @@ export class MaritimeShipmentForm implements OnInit {
       '',
       [
         Validators.required,
-        Validators.pattern(/^[A-Za-z]{3}\d{3}[A-Za-z]$/),
+        Validators.pattern(/^[A-Za-z]{3}\d{4}[A-Za-z]$/),
       ],
     ],
     status: [''],

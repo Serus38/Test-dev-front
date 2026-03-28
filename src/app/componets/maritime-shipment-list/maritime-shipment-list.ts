@@ -23,6 +23,11 @@ export class MaritimeShipmentList {
     this.listShipments();
   }
 
+  private toTimestamp(dateValue: string): number {
+    const timestamp = Date.parse(dateValue);
+    return Number.isFinite(timestamp) ? timestamp : 0;
+  }
+
   // Obtiene, ordena por fecha y publica el resultado en la vista.
   listShipments(): void {
     this.loading.set(true);
@@ -46,6 +51,29 @@ export class MaritimeShipmentList {
         }
         this.loading.set(false);
       },
+    });
+  }
+
+  // Formatea números a moneda local para mostrar en la tabla.
+  formatCurrency(value: number): string {
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      maximumFractionDigits: 0,
+    }).format(value);
+  }
+
+  // Formatea fechas a formato local legible para mostrar en tabla y detalle.
+  formatDate(dateValue: string): string {
+    const timestamp = this.toTimestamp(dateValue);
+    if (timestamp === 0) {
+      return 'Sin fecha';
+    }
+
+    return new Date(timestamp).toLocaleDateString('es-CO', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   }
 

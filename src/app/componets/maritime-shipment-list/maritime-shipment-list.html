@@ -20,7 +20,6 @@
           <th scope="col">Destino</th>
           <th scope="col">Origen</th>
           <th scope="col">Estado</th>
-          <th scope="col">Costo total</th>
           <th scope="col">Acciones</th>
         </tr>
       </thead>
@@ -28,7 +27,7 @@
         @for (shipment of shipments(); track shipment.id) {
           <tr>
             <td>{{ shipment.id }}</td>
-            <td>{{ shipment.deliveryDate }}</td>
+            <td>{{formatDate(shipment.deliveryDate) }}</td>
             <td>{{ shipment.guideNumber }}</td>
             <td>{{ getDestination(shipment) }}</td>
             <td>{{ getOrigin(shipment) }}</td>
@@ -42,7 +41,6 @@
                 >{{ shipment.status }}</span
               >
             </td>
-            <td>{{ shipment.totalCost }}</td>
             <td>
               <button type="button" (click)="openDetails(shipment)" class="btn btn-info">Ver</button>
               <a routerLink="/maritime_shipments/edit/{{ shipment.id }}" class="btn btn-secondary">Editar</a>
@@ -86,11 +84,11 @@
             </div>
             <div class="detail-item">
               <label>Fecha de Registro:</label>
-              <span>{{shipment.registrationDate}}</span>
+              <span>{{ formatDate(shipment.registrationDate) }}</span>
             </div>
             <div class="detail-item">
               <label>Fecha de Entrega:</label>
-              <span>{{ shipment.deliveryDate }}</span>
+              <span>{{formatDate(shipment.deliveryDate) }}</span>
             </div>
             <div class="detail-item">
               <label>Guía:</label>
@@ -102,7 +100,7 @@
             </div>
             <div class="detail-item">
               <label>Costo de Envío:</label>
-              <span>${{ shipment.shippingCost }}</span>
+              <span>{{ formatCurrency(shipment.shippingCost) }}</span>
             </div>
             <div class="detail-item">
               <label>Descuento (%):</label>
@@ -110,7 +108,7 @@
             </div>
             <div class="detail-item">
               <label>Costo Total:</label>
-              <span>${{ shipment.totalCost }}</span>
+              <span>{{ formatCurrency(shipment.totalCost) }}</span>
             </div>
             <div class="detail-item">
               <label>Cliente ID:</label>
