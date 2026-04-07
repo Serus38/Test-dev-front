@@ -1,6 +1,10 @@
-<div class="app-shell">
-	<app-navbar></app-navbar>
-	<main class="app-content" id="contenido-principal">
-		<router-outlet />
-	</main>
-</div>
+@if (isAuthenticated()) {
+	<div class="app-shell">
+		<app-navbar></app-navbar>
+		<main class="app-content" id="contenido-principal">
+			<router-outlet />
+		</main>
+	</div>
+} @else {
+	<router-outlet />
+}

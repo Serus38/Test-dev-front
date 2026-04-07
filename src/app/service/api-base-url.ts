@@ -17,7 +17,7 @@ function toAbsoluteHttpUrl(value: string): string {
 }
 
 const configuredApiBaseUrl = toAbsoluteHttpUrl(
-  importMeta.env?.NG_APP_API_URL ?? importMeta.env?.VITE_API_URL ?? 'https://test-dev-production-a619.up.railway.app',
+  importMeta.env?.NG_APP_API_URL ?? importMeta.env?.VITE_API_URL ?? 'http://localhost:8081'
 );
 
 export const API_BASE_URL = configuredApiBaseUrl.replace(/\/$/, '');
