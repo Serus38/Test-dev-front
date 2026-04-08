@@ -22,7 +22,7 @@ export class AuthService {
   // Base del modulo de autenticacion del backend.
   private readonly apiBase = API_BASE_URL;
   private readonly apiUrl = `${this.apiBase}/auth`;
-  // Claves persistidas para rehidratar sesion al recargar la app.
+  // Claves de sesion: no persisten al cerrar el navegador.
   private tokenKey = 'authToken';
   private usernameKey = 'username';
   
@@ -35,12 +35,15 @@ export class AuthService {
   // Inyecta HttpClient para login/validacion de token.
   constructor(private httpClient: HttpClient) {}
 
-  // Ejecuta login y sincroniza estado reactivo + almacenamiento local.
+  // Ejecuta login y sincroniza estado reactivo + almacenamiento de sesion.
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.httpClient.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
-        localStorage.setItem(this.tokenKey, response.token);
-        localStorage.setItem(this.usernameKey, response.username);
+        sessionStorage.setItem(this.tokenKey, response.token);
+        sessionStorage.setItem(this.usernameKey, response.username);
+        // Limpia persistencia antigua para forzar nuevo login al reabrir.
+        localStorage.removeItem(this.tokenKey);
+        localStorage.removeItem(this.usernameKey);
         this.isLoggedInSubject.next(true);
         this.userSubject.next(response.username);
       })
@@ -49,6 +52,8 @@ export class AuthService {
 
   // Cierra sesion local limpiando token e identidad del usuario.
   logout(): void {
+    sessionStorage.removeItem(this.tokenKey);
+    sessionStorage.removeItem(this.usernameKey);
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.usernameKey);
     this.isLoggedInSubject.next(false);
@@ -57,17 +62,17 @@ export class AuthService {
 
   // Retorna el JWT actual (si existe).
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return sessionStorage.getItem(this.tokenKey);
   }
 
   // Retorna el usuario persistido para pintar UI.
   getUsername(): string | null {
-    return localStorage.getItem(this.usernameKey);
+    return sessionStorage.getItem(this.usernameKey);
   }
 
   // Verifica presencia de token en almacenamiento.
   hasToken(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+    return !!sessionStorage.getItem(this.tokenKey);
   }
 
   // API simple usada por guards/componentes para proteger vistas.
