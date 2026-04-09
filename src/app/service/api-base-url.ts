@@ -16,8 +16,9 @@ function toAbsoluteHttpUrl(value: string): string {
   return `https://${normalized}`;
 }
 
+// Determine the API base URL from environment variables, with a fallback to localhost
 const configuredApiBaseUrl = toAbsoluteHttpUrl(
-  importMeta.env?.NG_APP_API_URL ?? importMeta.env?.VITE_API_URL ?? 'http://localhost:8081'
+  importMeta.env?.NG_APP_API_URL ?? importMeta.env?.VITE_API_URL ?? 'https://test-dev-front-nine.vercel.app/'
 );
 
 export const API_BASE_URL = configuredApiBaseUrl.replace(/\/$/, '');
